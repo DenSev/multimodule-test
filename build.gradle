@@ -1,0 +1,28 @@
+group 'com.densev.multimodule'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+ext {
+    logbackVersion = '1.1.8'
+    testNgVersion = '6.9.12'
+    mockitoVersion = '1.10.19'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        compile "ch.qos.logback:logback-classic:${logbackVersion}"
+        testCompile "org.mockito:mockito-all:${mockitoVersion}"
+        testCompile "org.testng:testng:${testNgVersion}"
+    }
+}

@@ -1,0 +1,27 @@
+# Exclude all files from target directory
+target/
+
+# Exclude all idea related project files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Exclude all Eclipse related project files
+.settings/
+.project
+.classpath
+
+# Exclude other generated items
+test-output/
+.DS_Store
+.checkstyle
+.pmd
+.pmdruleset.xml
+
+# Exclude gradle generated files
+.gradle/
+*/build/
+
+#exclude files which should only exist on local
+gradle.properties
