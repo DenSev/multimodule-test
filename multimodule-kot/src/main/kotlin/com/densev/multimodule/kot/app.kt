@@ -5,14 +5,19 @@ package com.densev.multimodule.kot
  */
 
 fun main(args: Array<String>) {
-    println("hello world")
-    println(task1(listOf(1, 2, 3, 4)))
-    val p = Person()
+
+    val p = Person(
+            name = "itsaname",
+            mother = null,
+            father = null,
+            gender = Person.Gender.MALE,
+            appearsAs = Person.Appearance.MANLY
+    )
+
     p.name("name")
             .gender(Person.Gender.FEMALE)
             .appearsAs(Person.Appearance.FEMININE)
 
-    println(p.toString())
 }
 
 
