@@ -12,6 +12,12 @@ class Person(name: String?, mother: Person?, father: Person?, gender: Gender?, a
         val logger: Logger = LoggerFactory.getLogger(Person::class.java);
     }
 
+    constructor (name: String, gender: Gender, appearsAs: Appearance) : this(name, null, null, gender, appearsAs){
+        this.name = name
+        this.gender = gender
+        this.appearsAs = appearsAs
+    }
+
     init {
         logger.debug("Person initialized with following params:\nname: ${name}, gender: ${gender}, mother: ${mother?.name}, father: ${father?.name}")
     }
