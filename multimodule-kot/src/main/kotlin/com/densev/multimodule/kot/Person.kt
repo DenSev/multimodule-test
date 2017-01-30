@@ -44,7 +44,7 @@ class Person(name: String?, mother: Person?, father: Person?, gender: Gender?, a
     }
 
     override fun toString(): String {
-        return "com.lordvekh.multimodule.kot.Person(name=$name, mother=$mother, father=$father, gender=$gender, appearsAs=$appearsAs)"
+        return "Person(name=$name, mother=$mother, father=$father, gender=$gender, appearsAs=$appearsAs)"
     }
 
     fun name(name: String): Person {

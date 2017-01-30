@@ -18,6 +18,7 @@ fun main(args: Array<String>) {
             .gender(Person.Gender.FEMALE)
             .appearsAs(Person.Appearance.FEMININE)
 
+    println(PersonFactory.createPerson().toString())
 }
 
 
