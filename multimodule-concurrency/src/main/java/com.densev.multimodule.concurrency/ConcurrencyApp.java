@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Dzianis_Sevastseyenk on 01/24/2017.
@@ -13,7 +15,7 @@ public class ConcurrencyApp {
 
     static Logger logger = LoggerFactory.getLogger(ConcurrencyApp.class);
 
-    private static Integer number;
+    static Integer i = 0;
 
     public static void main(String... args) {
 
@@ -21,27 +23,26 @@ public class ConcurrencyApp {
         ass.add("sss");
         ass.add(null);
         ass.add(null);
-        for (String s : ass) {
-            logger.error(s);
-        }
 
-       /* ExecutorService service = Executors.newFixedThreadPool(4);
+       ExecutorService service = Executors.newFixedThreadPool(4);
         service.submit(() -> {
-            for(int i= 0; i< 4;i ++) {
-
-                number = 1;
-                synchPrinter(number);
+            for (int j =0; j <3; j++){
+                ass.add(i.toString());
+                logger.info("old val: {}",i );
+                i++;
+                logger.info("thread 1:{} : {}", ass.toString(), i);
             }
 
-        });*/
+        });
 
-    }
-
-    public static void synchPrinter(Object o) {
-        synchronized (o) {
-            logger.info(o.toString());
-        }
-
+        service.submit(() -> {
+            for (int j = 0; j <3; j++){
+                ass.add(i.toString());
+                logger.info("old val: {}",i );
+                i++;
+                logger.info("thread 2:{} : {}", ass.toString(), i);
+            }
+        });
     }
 
 
