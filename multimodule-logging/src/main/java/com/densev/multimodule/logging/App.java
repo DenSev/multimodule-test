@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +29,16 @@ public class App {
 
         String[] arr = new String[]{"1","2","3","4","5","6"};
 
+        Integer in = lambdaTest("asdf", (str)->{
+            try {
+                System.out.println(str);
+                return new Integer(str);
+            } catch (NumberFormatException nfe){
+                logger.error("Cannot convert str to integer", nfe);
+                return null;
+            }
+        });
+        System.out.println(in);
 
         Map<String, Integer> map = Arrays.stream(arr)
             .collect(Collectors.toMap(s -> s, s->1));
@@ -40,4 +51,9 @@ public class App {
         }*/
 
     }
+
+    public static Integer lambdaTest(String t, Function<String, Integer> function){
+        return function.apply(t);
+    }
+
 }

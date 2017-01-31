@@ -19,7 +19,7 @@ class Person(name: String?, mother: Person?, father: Person?, gender: Gender?, a
     }
 
     init {
-        logger.debug("Person initialized with following params:\nname: ${name}, gender: ${gender}, mother: ${mother?.name}, father: ${father?.name}")
+        logger.debug("Person initialized with following params:\tname: ${name}, gender: ${gender}, mother: ${mother?.name}, father: ${father?.name}")
     }
 
     var name: String? = null
@@ -27,21 +27,6 @@ class Person(name: String?, mother: Person?, father: Person?, gender: Gender?, a
     var father: Person? = null
     var gender: Gender? = null
     var appearsAs: Appearance? = null
-
-    enum class Gender {
-        MALE,
-        FEMALE
-    }
-
-    enum class Appearance {
-        MANLY,
-        FEMININE,
-        ANDROGYNOUS,
-        AMAZON,
-        REGULAR,
-        BEAR,
-        MAMA_BEAR
-    }
 
     override fun toString(): String {
         return "Person(name=$name, mother=$mother, father=$father, gender=$gender, appearsAs=$appearsAs)"
