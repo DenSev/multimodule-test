@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
 fun test() {
 
     val p = Person(
-            name = "itsaname",
+            name = "its a name",
             mother = null,
             father = null,
             gender = Gender.MALE,
