@@ -5,24 +5,8 @@ package com.densev.multimodule.kot
  */
 
 fun main(args: Array<String>) {
-    for (i in 1..10) {
-        PersonFactory.createPerson()
-    }
-}
 
-fun test() {
-
-    val p = Person(
-            name = "its a name",
-            mother = null,
-            father = null,
-            gender = Gender.MALE,
-            appearsAs = Appearance.MANLY
-    )
-
-    p.name("name")
-            .gender(Gender.FEMALE)
-            .appearsAs(Appearance.FEMININE)
+    var kingdom : Kingdom= Kingdom("Orc kingdom")
 }
 
 fun task1(collection: Collection<Int>): String {

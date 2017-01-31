@@ -12,4 +12,8 @@ object RandomFactory {
     fun int(bound: kotlin.Int) : kotlin.Int {
         return rand.nextInt(bound)
     }
+
+    fun double() : kotlin.Double{
+        return rand.nextDouble()
+    }
 }
