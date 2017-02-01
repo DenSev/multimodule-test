@@ -45,5 +45,13 @@ public class ConcurrencyApp {
         });
     }
 
+    public class RunnableCounter implements Runnable{
+
+        @Override
+        public void run() {
+
+        }
+    }
+
 
 }
