@@ -15,43 +15,39 @@ public class ConcurrencyApp {
 
     static Logger logger = LoggerFactory.getLogger(ConcurrencyApp.class);
 
-    static Integer i = 0;
 
-    public static void main(String... args) {
+    private static volatile int MY_INT = 0;
 
-        List<String> ass = new ArrayList<>();
-        ass.add("sss");
-        ass.add(null);
-        ass.add(null);
-
-       ExecutorService service = Executors.newFixedThreadPool(4);
-        service.submit(() -> {
-            for (int j =0; j <3; j++){
-                ass.add(i.toString());
-                logger.info("old val: {}",i );
-                i++;
-                logger.info("thread 1:{} : {}", ass.toString(), i);
-            }
-
-        });
-
-        service.submit(() -> {
-            for (int j = 0; j <3; j++){
-                ass.add(i.toString());
-                logger.info("old val: {}",i );
-                i++;
-                logger.info("thread 2:{} : {}", ass.toString(), i);
-            }
-        });
+    public static void main(String[] args) {
+        new Thread(new ChangeListener()).start();
+        new Thread(new ChangeMaker()).start();
     }
 
-    public class RunnableCounter implements Runnable{
-
+    static class ChangeListener implements Runnable {
         @Override
         public void run() {
-
+            int local_value = MY_INT;
+            while ( local_value < 5){
+                if( local_value!= MY_INT){
+                    logger.info("Got Change for MY_INT : {}", MY_INT);
+                    local_value= MY_INT;
+                }
+            }
         }
     }
 
+    static class ChangeMaker implements Runnable{
+        @Override
+        public void run() {
 
+            int local_value = MY_INT;
+            while (MY_INT <5){
+                logger.info("Incrementing MY_INT to {}", local_value+1);
+                MY_INT = ++local_value;
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) { e.printStackTrace(); }
+            }
+        }
+    }
 }
