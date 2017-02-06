@@ -5,6 +5,17 @@ package com.densev.multimodule.kot.army
  */
 class HorseArchers : Horsemen, Archers {
 
+    var numbers : Int? = null
+        public set
+        public get
+
+    var counter = 0
+        set(value) {
+            if (value >= 0) field = value
+        }
+
     constructor()
+
+
 
 }

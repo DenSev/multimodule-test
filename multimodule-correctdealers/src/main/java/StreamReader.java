@@ -21,7 +21,7 @@ public class StreamReader {
                 .map((str)->{
 
 
-                    return str + "&sort=_drivetime";
+                    return "http://qa-11-www.edmunds.com" + str;
                 })
                 .collect(Collectors.toList());
             return urls;
