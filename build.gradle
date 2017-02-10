@@ -10,6 +10,8 @@ ext {
     logbackVersion = '1.1.8'
     testNgVersion = '6.9.12'
     mockitoVersion = '1.10.19'
+    googleGuavaVersion = '20.0'
+
 }
 
 subprojects {
