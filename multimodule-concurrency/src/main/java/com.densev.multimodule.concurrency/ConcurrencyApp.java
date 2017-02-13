@@ -41,7 +41,6 @@ public class ConcurrencyApp {
         logger.info("changeMaker returned results: {}", changeMaker.get());
         logger.info("changeListener returned results: {}", changeListener.get());
 
-        //test /test
     }
 
     static class ChangeListener implements Callable<String> {
