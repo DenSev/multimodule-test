@@ -5,41 +5,68 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.stream.IntStream;
 
 /**
  * Created by Dzianis_Sevastseyenk on 01/24/2017.
  */
 public class ConcurrencyApp {
 
-    static Logger logger = LoggerFactory.getLogger(ConcurrencyApp.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConcurrencyApp.class);
 
 
     //SYCNHRONIZED
     //VOLATILE
-    //TODO: EXECUTOR SERVICE, EXECUTORS, TYPES OF EXECUTORS
-    //TODO: CALLABLE
-    //TODO: FUTURE
+    //EXECUTOR SERVICE, EXECUTORS, TYPES OF EXECUTORS
+    //CALLABLE
+    //FUTURE
     //TODO: LOCK
 
     private static volatile int MY_INT = 0;
 
+    public void incrementSync(){
+        MY_INT++;
+    }
+
+    public void func() throws InterruptedException{
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        IntStream.range(0, 10000)
+            .forEach(i -> executor.submit(this::incrementSync));
+
+        //executor.shutdown();
+
+        executor.awaitTermination(1, TimeUnit.SECONDS);
+        logger.info("result: {}", MY_INT);
+    }
+
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-        ThreadFactory threadFactory = new ThreadFactoryBuilder()
+
+        ConcurrencyApp app
+             =new ConcurrencyApp();
+        app.func();
+
+        /*ThreadFactory threadFactory = new ThreadFactoryBuilder()
             .setDaemon(true)
             .setNameFormat("my factory")
             .build();
+
+
 
         ExecutorService executorService = Executors.newFixedThreadPool(2, threadFactory);
         Future<String> changeListener = executorService.submit(new ChangeListener());
         Future<String> changeMaker = executorService.submit(new ChangeMaker());
 
         logger.info("changeMaker returned results: {}", changeMaker.get());
-        logger.info("changeListener returned results: {}", changeListener.get());
+        logger.info("changeListener returned results: {}", changeListener.get());*/
 
     }
 
