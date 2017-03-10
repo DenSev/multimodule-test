@@ -1,31 +1,48 @@
 package com.densev.multimodule.kot
 
 import com.densev.multimodule.kot.army.HorseArchers
+import com.google.common.base.Stopwatch
+import org.slf4j.LoggerFactory
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by Dzianis_Sevastseyenk on 01/03/2017.
  */
+class App {
 
-fun main(args: Array<String>) {
+    companion object {
 
-    var kingdom : Kingdom= Kingdom("Orc kingdom")
+        val logger = LoggerFactory.getLogger(App::class.java)
 
-    var ha : HorseArchers = HorseArchers()
+        @JvmStatic fun main(args: Array<String>) {
 
-    ha.counter = 10
-}
+            var stopwatch: Stopwatch = Stopwatch.createStarted()
 
-fun task1(collection: Collection<Int>): String {
-    val sb = StringBuilder()
-    sb.append("{")
-    val iterator = collection.iterator()
-    while (iterator.hasNext()) {
-        val element = iterator.next()
-        sb.append(element)
-        if (iterator.hasNext()) {
-            sb.append(", ")
+            var kingdom: Kingdom = Kingdom("Orc kingdom")
+            var ha: HorseArchers = HorseArchers()
+
+            ha.counter = 10
+            stopwatch.stop()
+            logger.info("run for {} milliseconds", stopwatch.elapsed(TimeUnit.MILLISECONDS))
         }
+
     }
-    sb.append("}")
-    return sb.toString()
+
+    fun task1(collection: Collection<Int>): String {
+        val sb = StringBuilder()
+        sb.append("{")
+        val iterator = collection.iterator()
+        while (iterator.hasNext()) {
+            val element = iterator.next()
+            sb.append(element)
+            if (iterator.hasNext()) {
+                sb.append(", ")
+            }
+        }
+        sb.append("}")
+        return sb.toString()
+    }
 }
+
+

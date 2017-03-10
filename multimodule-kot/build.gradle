@@ -16,5 +16,6 @@ repositories {
 }
 
 dependencies {
+    compile "com.google.guava:guava:21.0"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
