@@ -23,6 +23,7 @@ subprojects {
     }
 
     dependencies {
+        compile "com.google.guava:guava:21.0"
         compile "ch.qos.logback:logback-classic:${logbackVersion}"
         testCompile "org.mockito:mockito-all:${mockitoVersion}"
         testCompile "org.testng:testng:${testNgVersion}"

@@ -5,13 +5,19 @@ package com.densev.multimodule.visitor;
  */
 public class Converter implements Visitor {
 
-    public String visitConvertible(ConvertibleWrapper visitable) {
-        System.out.println("1234");
-        return visitable.convertible.getNumber().toString();
+    public String visitConvertible(Convertible visitable) {
+        return visitable.getNumber().toString();
     }
 
-    public String convert(Visitable visitable){
+    public String convert(Visitable visitable) {
         return visitable.accept(this);
+    }
+
+    public String bruteConvert(Visitable visitable) {
+        if (visitable.getClass().equals(Convertible.class)) {
+            return visitConvertible((Convertible) visitable);
+        }
+        return null;
     }
 
 

@@ -5,5 +5,5 @@ package com.densev.multimodule.visitor;
  */
 public interface Visitor {
 
-    String visitConvertible(ConvertibleWrapper visitable);
+    String visitConvertible(Convertible visitable);
 }
