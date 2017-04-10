@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<ruleset name="Custom ruleset"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <rule ref="rulesets/java/unusedcode.xml">
+        <exclude name="UnusedPrivateMethod"/>    <!-- Doesn't handle var-arg and reflection correctly -->
+        <exclude name="UnusedModifier"/>   <!-- Doesn't handle public modifiers correctly -->
+    </rule>
+    <rule ref="rulesets/java/basic.xml">
+        <exclude name="CollapsibleIfStatements"/>    <!-- some of these make sense for clarity -->
+        <exclude name="OverrideBothEqualsAndHashcode"/> <!-- too many offenders and too complicated to fix-->
+        <exclude name="UselessOverridingMethod"/> <!-- methods with hibernate markup -->
+        <exclude name="CheckResultSet"/>    <!-- highly impractial -->
+        <exclude name="AvoidUsingHardCodedIP"/>    <!-- we have plenty of these in dma unit tests. -->
+        <exclude name="AvoidThreadGroup"/> <!-- Bug in PMD cause false positives. -->
+        <exclude name="AvoidBranchingStatementAsLastInLoop"/>
+    </rule>
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="AvoidReassigningParameters"/> <!-- too many offenders, too complicated to fix -->
+        <exclude name="ImmutableField"/> <!-- too common, not that bad -->
+        <exclude name="CloseResource"/> <!-- got tripped up on our connection factory code -->
+        <exclude name="AvoidSynchronizedAtMethodLevel"/> <!-- too tricky to fix -->
+        <exclude name="PreserveStackTrace"/> <!-- too many old exception types dont support this (SQLException...) -->
+        <exclude name="AvoidDeeplyNestedIfStmts"/> <!-- too many offenders, too hard to fix -->
+        <exclude name="AssignmentToNonFinalStatic"/> <!-- too hard to fix -->
+        <exclude name="UncommentedEmptyConstructor"/> <!-- does not check for a javadoc -->
+        <exclude name="UncommentedEmptyMethod"/> <!-- does not check for javadoc -->
+        <exclude name="NonThreadSafeSingleton"/> <!-- too hard to fix -->
+        <exclude name="ConstructorCallsOverridableMethod"/> <!-- too hard to fix -->
+        <exclude name="CompareObjectsWithEquals"/> <!-- some uses sortof legit. a bit tricky to fix. -->
+        <exclude name="ConfusingTernary"/> <!-- too many offenders, and triggers on else-ifs that cant be reversed -->
+        <exclude name="SwitchStmtsShouldHaveDefault"/> <!-- hard to fix, not that bad -->
+        <exclude name="SwitchDensity"/> <!-- too hard to fix -->
+        <exclude name="MissingBreakInSwitch"/> <!-- debatable, too hard to fix -->
+        <exclude name="UseLocaleWithCaseConversions"/> <!-- not that bad -->
+        <exclude name="SimpleDateFormatNeedsLocale"/> <!-- not that bad -->
+        <exclude name="AbstractClassWithoutAbstractMethod"/> <!-- Removed by vote. -->
+        <exclude name="GodClass"/>
+        <exclude name="LogicInversion"/>
+    </rule>
+    <rule ref="rulesets/java/migrating.xml/AvoidEnumAsIdentifier"/>
+
+</ruleset>
