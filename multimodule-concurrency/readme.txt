@@ -10,8 +10,8 @@ First, the easy cases where you basically don't need volatile or any other synch
 * volatile is not necessary for variables that are accessed by only one thread (though of course you
 have to make a correct decision that they are only accessed by one thread!);
 * volatile is not suitable for complex operations where you need to prevent access to a variable for
-the duration of the operation: in such cases, you should use object synchronization or one of Java 5's explicit lock classes added.
-
+the duration of the operation: in such cases, you should use object synchronization or one of Java 5's
+explicit lock classes added.
 
 wait/sleep/yield
 * sleep and yield are defined in Thread class, wait is defined in Object class
@@ -29,4 +29,3 @@ shutdown hooks
 * once shutdown sequence starts, it can be stopped by Runtime.halt() only
 * using shutdown hooks requires security permissions
 * exceptions thrown by shutdown hooks are treated same as any other exceptions
-
