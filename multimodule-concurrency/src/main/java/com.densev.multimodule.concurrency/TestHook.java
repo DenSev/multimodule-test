@@ -6,12 +6,9 @@ package com.densev.multimodule.concurrency;
 public class TestHook {
     public static void main(String[] args) {
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            String s = "Shutdown Hook is running !";
-            public void run() {
-                System.out.println(s);
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+
+        }));
 
 
         System.out.println("Application Terminating ...");

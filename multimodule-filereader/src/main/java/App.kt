@@ -10,6 +10,8 @@ import java.nio.channels.ReadableByteChannel
 object App {
 
     @JvmStatic fun main(args: Array<String>) {
+
+
         /*val urls = StreamReader.readOther2Csv()
 
         for (url in urls) {

@@ -39,6 +39,8 @@ public class ConcurrencyApp {
     public void func() throws InterruptedException{
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
+        executor.submit(() -> System.out.println("asdasd"));
+
         IntStream.range(0, 10000)
             .forEach(i -> executor.submit(this::incrementSync));
 
