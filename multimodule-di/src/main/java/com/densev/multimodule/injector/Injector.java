@@ -17,34 +17,36 @@ public enum Injector {
 
     INSTANCE;
 
-    private final static Logger LOG = LoggerFactory.getLogger(Injector.class);
-    private final static Map<String, Object> container = new HashMap<>();
+    private final Logger LOG = LoggerFactory.getLogger(Injector.class);
+    private final Map<Class<?>, Object> container;
 
-    private Object getBean(Class clazz) {
+    Injector() {
+        container = new HashMap<>();
+        //inject();
+    }
+
+    public <T> T getBean(Class<T> clazz) {
         if (clazz.isAnnotationPresent(Wireable.class)) {
-            String classname = ((Wireable) clazz.getAnnotation(Wireable.class)).value();
-            if (classname != null && classname.length() > 0) {
-                return getBean(classname, clazz);
-            } else {
-                return getBean(clazz.getName(), clazz);
-            }
-
+            //String classname = ((Wireable) clazz.getAnnotation(Wireable.class)).value();
+            return getBeanInstance(clazz);
         } else {
             LOG.error("Cannot wire a non wireable class: {}", clazz.getName());
             throw new RuntimeException("Cannot wire a non wireable class");
         }
     }
 
-    public Object getBean(String classname, Class clazz) {
+    public <T> T getBeanInstance(Class<T> clazz) {
         try {
             if (container.containsKey(clazz)) {
-                LOG.info("Retreiving instance of class {} from container", clazz.getName());
-                return container.get(classname);
+                LOG.info("Retrieving instance of class {} from container", clazz.getName());
+                return (T) container.get(clazz);
             } else {
                 LOG.info("Creating new instance of class: {}", clazz.getName());
                 Object instance = clazz.newInstance();
-                container.put(classname, instance);
-                return instance;
+                container.put(clazz, instance);
+                //TODO: experiment with wiring order
+                wire(instance, clazz);
+                return (T) instance;
             }
         } catch (ReflectiveOperationException roe) {
             LOG.error("Error creating new instance of {}", clazz.getName());
@@ -54,20 +56,25 @@ public enum Injector {
 
     public void wire(Object obj, Class<?> clazz) {
         Arrays.stream(clazz.getDeclaredFields())
-            .filter(field -> field.isAnnotationPresent(Wired.class))
-            .forEach(field -> {
-                try {
-                    field.setAccessible(true);
-                    field.set(obj, getBean(field.getType()));
-                } catch (IllegalAccessException iae) {
-                    LOG.error("Error wiring field {} of class {}", field.getName(), clazz.getName(), iae);
-                }
-            });
+                .filter(field -> field.isAnnotationPresent(Wired.class))
+                .forEach(field -> {
+                    try {
+                        field.setAccessible(true);
+                        field.set(obj, getBean(field.getType()));
+                    } catch (IllegalAccessException iae) {
+                        LOG.error("Error wiring field {} of class {}", field.getName(), clazz.getName(), iae);
+                    }
+                });
     }
 
 
     public void inject() {
         Reflections reflections = new Reflections("com.densev.multimodule.injector", null);
+        reflections.getTypesAnnotatedWith(Wireable.class)
+                .forEach(type -> {
+                    getBeanInstance(type);
+                });
+        System.out.println(container.toString());
         //reflections.get
     }
 }

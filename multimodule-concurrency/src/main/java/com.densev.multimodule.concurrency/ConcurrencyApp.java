@@ -1,18 +1,9 @@
 package com.densev.multimodule.concurrency;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
 /**
@@ -32,17 +23,17 @@ public class ConcurrencyApp {
 
     private static volatile int MY_INT = 0;
 
-    public void incrementSync(){
+    public void incrementSync() {
         MY_INT++;
     }
 
-    public void func() throws InterruptedException{
+    public void func() throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
         executor.submit(() -> System.out.println("asdasd"));
 
         IntStream.range(0, 10000)
-            .forEach(i -> executor.submit(this::incrementSync));
+                .forEach(i -> executor.submit(this::incrementSync));
 
         //executor.shutdown();
 
@@ -53,13 +44,13 @@ public class ConcurrencyApp {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
 
         ConcurrencyApp app
-             =new ConcurrencyApp();
+                = new ConcurrencyApp();
         app.func();
 
         /*ThreadFactory threadFactory = new ThreadFactoryBuilder()
-            .setDaemon(true)
-            .setNameFormat("my factory")
-            .build();
+                .setDaemon(true)
+                .setNameFormat("my factory")
+                .build();
 
 
 

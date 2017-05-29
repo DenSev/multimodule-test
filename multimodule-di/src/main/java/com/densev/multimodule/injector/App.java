@@ -1,24 +1,29 @@
 package com.densev.multimodule.injector;
 
+import com.densev.multimodule.injector.annotation.Wireable;
 import com.densev.multimodule.injector.annotation.Wired;
 
 /**
  * Created by Dzianis_Sevastseyenk on 05/29/2017.
  */
+@Wireable
 public class App {
 
-    @Wired("test")
-    public static WireableTest test;
+    @Wired
+    private static WireableTest test;
 
-    static {
-        Injector.INSTANCE.wire(null, App.class);
-    }
+    @Wired
+    private OtherTestClass otherTestClass;
 
     public static void main(String... args) {
 
+        App app = Injector.INSTANCE.getBean(App.class);
+        app.run();
 
+    }
+
+    public void run(){
         test.test();
-
-        new OtherTestClass().testing();
+        otherTestClass.testing();
     }
 }
