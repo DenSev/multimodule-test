@@ -18,29 +18,38 @@ public enum Injector {
     INSTANCE;
 
     private final static Logger LOG = LoggerFactory.getLogger(Injector.class);
-    private final static Map<Class<?>, Object> container = new HashMap<>();
+    private final static Map<String, Object> container = new HashMap<>();
 
     private Object getBean(Class clazz) {
         if (clazz.isAnnotationPresent(Wireable.class)) {
-            try {
-                if (container.containsKey(clazz)) {
-                    LOG.info("Retreiving instance of class {} from container", clazz.getName());
-                    return container.get(clazz);
-                } else {
-                    LOG.info("Creating new instance of class: {}", clazz.getName());
-                    Object instance = clazz.newInstance();
-                    container.put(clazz, instance);
-                    return instance;
-                }
-            } catch (ReflectiveOperationException roe) {
-                LOG.error("Error creating new instance of {}", clazz.getName());
-                throw new RuntimeException("");
+            String classname = ((Wireable) clazz.getAnnotation(Wireable.class)).value();
+            if (classname != null && classname.length() > 0) {
+                return getBean(classname, clazz);
+            } else {
+                return getBean(clazz.getName(), clazz);
             }
+
         } else {
             LOG.error("Cannot wire a non wireable class: {}", clazz.getName());
             throw new RuntimeException("Cannot wire a non wireable class");
         }
+    }
 
+    public Object getBean(String classname, Class clazz) {
+        try {
+            if (container.containsKey(clazz)) {
+                LOG.info("Retreiving instance of class {} from container", clazz.getName());
+                return container.get(classname);
+            } else {
+                LOG.info("Creating new instance of class: {}", clazz.getName());
+                Object instance = clazz.newInstance();
+                container.put(classname, instance);
+                return instance;
+            }
+        } catch (ReflectiveOperationException roe) {
+            LOG.error("Error creating new instance of {}", clazz.getName());
+            throw new RuntimeException("");
+        }
     }
 
     public void wire(Object obj, Class<?> clazz) {
@@ -55,6 +64,7 @@ public enum Injector {
                 }
             });
     }
+
 
     public void inject() {
         Reflections reflections = new Reflections("com.densev.multimodule.injector", null);

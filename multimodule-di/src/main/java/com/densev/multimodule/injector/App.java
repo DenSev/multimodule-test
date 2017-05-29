@@ -7,7 +7,7 @@ import com.densev.multimodule.injector.annotation.Wired;
  */
 public class App {
 
-    @Wired
+    @Wired("test")
     public static WireableTest test;
 
     static {
