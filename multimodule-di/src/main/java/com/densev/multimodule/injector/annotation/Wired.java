@@ -1,4 +1,4 @@
-package com.densev.multimodule.injector;
+package com.densev.multimodule.injector.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

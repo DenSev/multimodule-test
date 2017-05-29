@@ -1,5 +1,6 @@
 package com.densev.multimodule.injector;
 
+import com.densev.multimodule.injector.annotation.Wireable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 /**
  * Created by Dzianis_Sevastseyenk on 05/29/2017.
  */
-@SupportedAnnotationTypes("com.densev.multimodule.injector.Wireable")
+@SupportedAnnotationTypes("com.densev.multimodule.injector.annotation.Wireable")
 public class AnnotationProcessor extends AbstractProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(AnnotationProcessor.class);

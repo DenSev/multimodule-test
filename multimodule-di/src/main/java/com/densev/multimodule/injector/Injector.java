@@ -1,5 +1,8 @@
 package com.densev.multimodule.injector;
 
+import com.densev.multimodule.injector.annotation.Wireable;
+import com.densev.multimodule.injector.annotation.Wired;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,5 +54,10 @@ public enum Injector {
                     LOG.error("Error wiring field {} of class {}", field.getName(), clazz.getName(), iae);
                 }
             });
+    }
+
+    public void inject() {
+        Reflections reflections = new Reflections("com.densev.multimodule.injector", null);
+        //reflections.get
     }
 }

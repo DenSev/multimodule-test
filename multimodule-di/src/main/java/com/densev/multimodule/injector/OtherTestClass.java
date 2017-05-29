@@ -1,5 +1,7 @@
 package com.densev.multimodule.injector;
 
+import com.densev.multimodule.injector.annotation.Wired;
+
 /**
  * Created by Dzianis_Sevastseyenk on 05/29/2017.
  */
