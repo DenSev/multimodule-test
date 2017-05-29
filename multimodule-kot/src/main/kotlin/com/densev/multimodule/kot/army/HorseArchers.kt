@@ -5,9 +5,9 @@ package com.densev.multimodule.kot.army
  */
 class HorseArchers : Horsemen, Archers {
 
-    var numbers : Int? = null
-        public set
-        public get
+    var numbers: Int? = null
+        set
+        get
 
     var counter = 0
         set(value) {
@@ -15,7 +15,6 @@ class HorseArchers : Horsemen, Archers {
         }
 
     constructor()
-
 
 
 }
