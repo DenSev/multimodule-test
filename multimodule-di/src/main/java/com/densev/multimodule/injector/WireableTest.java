@@ -12,7 +12,11 @@ public class WireableTest {
     @Wired
     private OtherTestClass circularDependencyTest;
 
+    @Wired
+    private InterfaceTest interfaceTest;
+
     public void test() {
         System.out.println("testing wiring");
+        interfaceTest.doSomething();
     }
 }
