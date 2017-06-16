@@ -1,5 +1,7 @@
 package com.densev.multimodule.injector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.densev.multimodule.injector.annotation.Wireable;
 
 /**
@@ -8,8 +10,11 @@ import com.densev.multimodule.injector.annotation.Wireable;
 @Wireable
 public class InterfaceImpl implements InterfaceTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(InterfaceImpl.class);
+
     @Override
     public void doSomething() {
-        System.out.println("doing something");
+
+        LOG.info("doing something");
     }
 }

@@ -1,5 +1,7 @@
 package com.densev.multimodule.injector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.densev.multimodule.injector.annotation.Wireable;
 import com.densev.multimodule.injector.annotation.Wired;
 
@@ -8,15 +10,20 @@ import com.densev.multimodule.injector.annotation.Wired;
  */
 @Wireable("test")
 public class WireableTest {
-
-    @Wired
+    private static final Logger LOG = LoggerFactory.getLogger(WireableTest.class);
     private OtherTestClass circularDependencyTest;
-
-    @Wired
     private InterfaceTest interfaceTest;
 
+    @Wired
+    public WireableTest(OtherTestClass circularDependencyTest, InterfaceTest interfaceTest) {
+        this.circularDependencyTest = circularDependencyTest;
+        this.interfaceTest = interfaceTest;
+    }
+
     public void test() {
-        System.out.println("testing wiring");
+        LOG.info("Class: {}", circularDependencyTest);
+        circularDependencyTest.testOther();
+        LOG.info("testing wiring");
         interfaceTest.doSomething();
     }
 }

@@ -1,5 +1,7 @@
 package com.densev.multimodule.injector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.densev.multimodule.injector.annotation.Wireable;
 import com.densev.multimodule.injector.annotation.Wired;
 
@@ -9,11 +11,17 @@ import com.densev.multimodule.injector.annotation.Wired;
 @Wireable
 public class OtherTestClass {
 
+    private static final Logger LOG = LoggerFactory.getLogger(OtherTestClass.class);
     @Wired
     private WireableTest test;
 
     public void testing() {
-        System.out.println("a new challenger appears");
+        LOG.info("a new challenger appears");
         test.test();
+    }
+
+    public void testOther() {
+        LOG.info("dependency present? {}", test != null);
+        LOG.info("other dependency test");
     }
 }

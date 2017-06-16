@@ -1,16 +1,19 @@
 package com.densev.multimodule.injector;
 
-import com.densev.multimodule.injector.annotation.Wireable;
-import com.densev.multimodule.injector.annotation.Wired;
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.densev.multimodule.injector.annotation.Wireable;
+import com.densev.multimodule.injector.annotation.Wired;
 
 /**
  * Created by Dzianis_Sevastseyenk on 05/29/2017.
@@ -39,7 +42,13 @@ public enum Injector {
         if (clazz.isAnnotationPresent(Wireable.class)) {
 
             LOG.debug("Creating new instance of class: {}", clazz.getName());
-            return clazz.newInstance();
+            T instance = wireViaConstructor(clazz);
+            if (instance == null) {
+                LOG.warn("Instance is null, trying to create new instance through .newInstance()");
+                instance = clazz.newInstance();
+            }
+
+            return instance;
 
         } else {
             LOG.error("Cannot wire a non wireable class: {}", clazz.getName());
@@ -81,7 +90,33 @@ public enum Injector {
 
     }
 
+    public <T> T wireViaConstructor(Class<T> clazz) {
+        List<T> instance = Arrays.stream(clazz.getConstructors())
+            /*.filter(constructor -> constructor.isAnnotationPresent(Wired.class))*/
+            .map(constructor -> {
+                try {
+                    List<Object> constructorArgs = Arrays.stream(constructor.getParameters())
+                        .map(parameter -> getBean(parameter.getType()))
+                        .collect(Collectors.toList());
+                    return (T) constructor.newInstance(constructorArgs.toArray());
+                } catch (InstantiationException ie) {
+                    LOG.error("Error while instantiating instance of class {}", clazz.getName());
+                    return null;
+                } catch (InvocationTargetException ite) {
+                    LOG.error("Error invocationTargetException");
+                    return null;
+                } catch (IllegalAccessException iae) {
+                    LOG.error("IllegalAccessException");
+                    return null;
+                }
+            }).collect(Collectors.toList());
+
+        return instance.size() != 0 ? instance.get(0) : null;
+
+    }
+
     public void wire(Object obj, Class<?> clazz) {
+
         Arrays.stream(clazz.getDeclaredFields())
             .filter(field -> field.isAnnotationPresent(Wired.class))
             .forEach(field -> {
