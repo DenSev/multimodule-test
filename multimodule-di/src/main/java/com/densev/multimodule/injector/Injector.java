@@ -1,6 +1,5 @@
 package com.densev.multimodule.injector;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,8 +84,8 @@ public enum Injector {
                 return (T) instance;
             }
         } catch (ReflectiveOperationException roe) {
-            LOG.error("Error creating new instance of {}", clazz.getName());
-            throw new RuntimeException("");
+            LOG.error("Error creating new instance of {}. \n {}", clazz.getName(), ExceptionUtils.getStackTrace(roe));
+            throw new RuntimeException(roe);
         }
 
     }
@@ -99,15 +99,9 @@ public enum Injector {
                         .map(parameter -> getBean(parameter.getType()))
                         .collect(Collectors.toList());
                     return (T) constructor.newInstance(constructorArgs.toArray());
-                } catch (InstantiationException ie) {
-                    LOG.error("Error while instantiating instance of class {}", clazz.getName());
-                    return null;
-                } catch (InvocationTargetException ite) {
-                    LOG.error("Error invocationTargetException");
-                    return null;
-                } catch (IllegalAccessException iae) {
-                    LOG.error("IllegalAccessException");
-                    return null;
+                } catch (ReflectiveOperationException e) {
+                    LOG.error("Error while instantiating instance of class {}. \n {}", clazz.getName(), ExceptionUtils.getStackTrace(e));
+                    throw new RuntimeException("Error while instantiating class" + clazz.getName(), e);
                 }
             }).collect(Collectors.toList());
 
@@ -124,7 +118,8 @@ public enum Injector {
                     field.setAccessible(true);
                     field.set(obj, getBean(field.getType()));
                 } catch (IllegalAccessException iae) {
-                    LOG.error("Error wiring field {} of class {}", field.getName(), clazz.getName(), iae);
+                    LOG.error("Error wiring field {} of class {}. \n {}", field.getName(), clazz.getName(), ExceptionUtils.getStackTrace(iae));
+                    throw new RuntimeException("Error wiring field {} of class" + field.getName(), iae);
                 }
             });
     }
