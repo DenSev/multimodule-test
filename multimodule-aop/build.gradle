@@ -1,0 +1,5 @@
+dependencies {
+    compile "org.springframework:spring-core:$springVersion"
+    compile "org.springframework:spring-context:$springVersion"
+    compile "org.aspectj:aspectjweaver:$aspectJVersion"
+}

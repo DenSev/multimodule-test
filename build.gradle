@@ -12,9 +12,9 @@ ext {
     testNgVersion = '6.9.12'
     mockitoVersion = '1.10.19'
     googleGuavaVersion = '20.0'
-
+    springVersion = '4.3.9.RELEASE'
+    aspectJVersion = '1.8.10'
 }
-
 
 project.configurations {
     all*.exclude group: 'log4j', module: 'log4j'
