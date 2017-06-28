@@ -1,5 +1,4 @@
 rootProject.name = 'multimodule-test'
-include 'multimodule-logging'
 include 'multimodule-grooby'
 include 'multimodule-kot'
 include 'multimodule-visitor'
