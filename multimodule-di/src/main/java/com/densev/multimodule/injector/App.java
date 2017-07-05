@@ -1,24 +1,24 @@
 package com.densev.multimodule.injector;
 
-import java.util.concurrent.TimeUnit;
-
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.densev.multimodule.injector.annotation.Wireable;
-import com.densev.multimodule.injector.annotation.Wired;
-import com.google.common.base.Stopwatch;
+
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by Dzianis_Sevastseyenk on 05/29/2017.
  */
-@Wireable
+@Singleton
 public class App {
 
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
-    @Wired
+    @Inject
     private static WireableTest test;
 
-    @Wired
+    @Inject
     private OtherTestClass otherTestClass;
 
     public static void main(String... args) {
@@ -28,7 +28,7 @@ public class App {
         LOG.info("Elapsed: {} ", stopwatch.elapsed(TimeUnit.MICROSECONDS));
     }
 
-    public void run(){
+    public void run() {
         test.test();
         otherTestClass.testing();
     }

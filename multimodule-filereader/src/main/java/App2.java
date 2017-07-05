@@ -1,13 +1,8 @@
 import com.google.common.collect.Lists;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -31,7 +26,23 @@ public class App2 {
         String[] fields = {fields1, fields2, fields3};
         Set<Entry<String, List<String>>> fieldsTree = new HashSet<>();
 
-        for (String item : fields) {
+        System.out.println(5000 % 1024);
+        System.out.println(5000 / 1024);
+
+
+        Integer[] ints = {0, 1, 2, 3, 4, 5, 6};
+
+        List<Integer> intList = Arrays.asList(ints);
+
+
+        Lists.partition(intList, 3).stream()
+            .forEach(list -> System.out.println(list));
+        for (int i = 0; i < ints.length / 3; i++) {
+            System.out.println(Arrays.asList(ints).subList(i * 3, (i + 1) * 3));
+        }
+
+
+       /* for (String item : fields) {
             String[] splitFields = item.split(":");
             int groupsCount = 2;
             for (int i = 0; i < splitFields.length; i++) {
@@ -75,7 +86,7 @@ public class App2 {
         System.out.println(map.toString());
 
         System.out.println(list.toString());
-
+*/
         /*for (String line : urls) {
             System.out.println(line);
         }*/

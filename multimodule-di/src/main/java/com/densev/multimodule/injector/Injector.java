@@ -1,5 +1,10 @@
 package com.densev.multimodule.injector;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,13 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.densev.multimodule.injector.annotation.Wireable;
-import com.densev.multimodule.injector.annotation.Wired;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by Dzianis_Sevastseyenk on 05/29/2017.
@@ -39,7 +39,7 @@ public enum Injector {
     }
 
     public <T> T getNewInstance(Class<T> clazz) throws ReflectiveOperationException {
-        if (clazz.isAnnotationPresent(Wireable.class)) {
+        if (clazz.isAnnotationPresent(Singleton.class)) {
 
             LOG.debug("Creating new instance of class: {}", clazz.getName());
             T instance = wireViaConstructor(clazz);
@@ -112,7 +112,7 @@ public enum Injector {
     public void wire(Object obj, Class<?> clazz) {
 
         Arrays.stream(clazz.getDeclaredFields())
-            .filter(field -> field.isAnnotationPresent(Wired.class))
+            .filter(field -> field.isAnnotationPresent(Inject.class))
             .forEach(field -> {
                 try {
                     field.setAccessible(true);
@@ -127,7 +127,7 @@ public enum Injector {
 
     public void inject() {
         Reflections reflections = new Reflections(basePackage, null);
-        reflections.getTypesAnnotatedWith(Wireable.class)
+        reflections.getTypesAnnotatedWith(Singleton.class)
             .forEach(type -> {
                 getBeanInstance(type);
             });
