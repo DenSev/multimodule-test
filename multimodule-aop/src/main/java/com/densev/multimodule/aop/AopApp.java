@@ -28,7 +28,7 @@ public class AopApp {
 
 
     public void run() {
-        LOG.info(repositoryTest.search("something something something test"));
+        LOG.info(repositoryTest.wrapperSearch("something something something test"));
         logContainer.log();
     }
 }

@@ -13,5 +13,9 @@ public class RepositoryTest {
         return s + " - it's a test!";
     }
 
+    public String wrapperSearch(String s) {
+        return search(s);
+    }
+
 
 }

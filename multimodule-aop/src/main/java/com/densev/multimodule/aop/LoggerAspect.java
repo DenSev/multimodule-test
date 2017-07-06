@@ -21,7 +21,7 @@ public class LoggerAspect {
     @Autowired
     private LogContainer logContainer;
 
-    @Around("execution(public * com.densev.multimodule.aop.RepositoryTest.search(..))")
+    @Around("execution(public * com.densev.multimodule.aop.RepositoryTest.*(..))")
     public Object log(ProceedingJoinPoint pjp) throws Throwable {
 
         final Object[] args = pjp.getArgs();
