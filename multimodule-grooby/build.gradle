@@ -1,3 +1,88 @@
-dependencies{
+import static org.gradle.util.ConfigureUtil.configure
+
+apply plugin: 'groovy'
+
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: DocumentationPlugin
+
+
+dependencies {
+    compile gradleApi()
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.7'
+}
+
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+
+books {
+    quickStart {
+        sourceFile = file('src/docs/quick-start')
+    }
+    userGuide {
+
+    }
+    developerGuide {
+
+    }
+}
+
+class DocumentationPlugin implements Plugin<Project> {
+
+    void apply(Project project) {
+        def books = project.container(Book)
+        books.all {
+            sourceFile = project.file("src/docs/$name")
+        }
+        project.extensions.books = books
+        project.extensions.create('documentBooks', DocumentationExtension, books)
+    }
+
+}
+
+class DocumentationExtension implements Configurable<DocumentationExtension> {
+
+    private NamedDomainObjectContainer<Book> books;
+
+    DocumentationExtension(NamedDomainObjectContainer<Book> books) {
+        this.books = books;
+    }
+
+    @Override
+    DocumentationExtension configure(Closure cl) {
+        configure(cl, new DocumentAction(books)).execute()
+        return this
+    }
+}
+
+class DocumentAction {
+
+    private NamedDomainObjectContainer<Book> books;
+
+    DocumentAction(NamedDomainObjectContainer<Book> books) {
+        this.books = books;
+    }
+
+    void execute(){
+        books.each { book ->
+            println "$book.name -> $book.sourceFile"
+        }
+    }
+}
+
+class Book {
+    final String name
+    File sourceFile
+
+    Book(String name) {
+        this.name = name
+    }
 }
