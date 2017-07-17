@@ -14,6 +14,7 @@ target/
 
 # Exclude other generated items
 test-output/
+reports/
 .DS_Store
 .checkstyle
 .pmd
