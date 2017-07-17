@@ -18,7 +18,7 @@ public class OtherTestClass {
 
     public void testing() {
         LOG.info("a new challenger appears");
-        test.test();
+        test.test("test");
     }
 
     public void testOther() {

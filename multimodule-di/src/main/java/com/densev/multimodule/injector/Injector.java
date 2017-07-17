@@ -22,8 +22,9 @@ public enum Injector {
 
     INSTANCE;
 
-    private final String basePackage = "com.densev.multimodule.injector";
-    private final Logger LOG = LoggerFactory.getLogger(Injector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Injector.class);
+
+    private String basePackage = "com.densev.multimodule.injector";
     private final Map<Class<?>, Object> container;
 
     Injector() {
@@ -62,7 +63,11 @@ public enum Injector {
         Set<Class<? extends T>> subtypes = reflections.getSubTypesOf(clazz);
         if (subtypes.size() > 1) {
             LOG.error("Found more than 1 candidate for {} interface implementation", clazz.getName());
-            throw new RuntimeException("Found more than 1 candidate for" + clazz.getName() + "interface implementation");
+            throw new RuntimeException(
+                "Found more than 1 candidate for"
+                    + clazz.getName()
+                    + "interface implementation"
+            );
         }
         return getNewInstance(new ArrayList<>(subtypes).get(0));
     }
@@ -100,12 +105,16 @@ public enum Injector {
                         .collect(Collectors.toList());
                     return (T) constructor.newInstance(constructorArgs.toArray());
                 } catch (ReflectiveOperationException e) {
-                    LOG.error("Error while instantiating instance of class {}. \n {}", clazz.getName(), ExceptionUtils.getStackTrace(e));
+                    LOG.error(
+                        "Error while instantiating instance of class {}. \n {}",
+                        clazz.getName(),
+                        ExceptionUtils.getStackTrace(e)
+                    );
                     throw new RuntimeException("Error while instantiating class" + clazz.getName(), e);
                 }
             }).collect(Collectors.toList());
 
-        return instance.size() != 0 ? instance.get(0) : null;
+        return instance.isEmpty() ? null : instance.get(0);
 
     }
 
@@ -118,7 +127,11 @@ public enum Injector {
                     field.setAccessible(true);
                     field.set(obj, getBean(field.getType()));
                 } catch (IllegalAccessException iae) {
-                    LOG.error("Error wiring field {} of class {}. \n {}", field.getName(), clazz.getName(), ExceptionUtils.getStackTrace(iae));
+                    LOG.error(
+                        "Error wiring field {} of class {}. \n {}",
+                        field.getName(), clazz.getName(),
+                        ExceptionUtils.getStackTrace(iae)
+                    );
                     throw new RuntimeException("Error wiring field {} of class" + field.getName(), iae);
                 }
             });

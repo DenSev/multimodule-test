@@ -38,3 +38,16 @@ subprojects {
         testCompile "org.testng:testng:${testNgVersion}"
     }
 }
+
+allprojects {
+    apply from: "$rootDir/code-quality.gradle"
+
+    test {
+        useTestNG() {
+            suites "src/test/resources/testng.xml"
+        }
+
+        // show standard out and standard error of the test JVM(s) on the console
+        testLogging.showStandardStreams = true
+    }
+}
