@@ -1,0 +1,16 @@
+apply plugin: 'com.bmuschko.clover'
+
+ext {
+    cloverVersion = '4.2.0'
+}
+
+dependencies {
+    clover "org.openclover:clover:${cloverVersion}"
+}
+
+clover {
+    includeTasks = ['test']
+    report {
+        html = true
+    }
+}
