@@ -1,6 +1,9 @@
 dependencies {
-    compile "org.springframework:spring-core:$springVersion"
-    compile "org.springframework:spring-context:$springVersion"
-    compile "org.aspectj:aspectjweaver:$aspectJVersion"
-    compile "com.h2database:h2:1.4.196"
+    implementation "org.springframework:spring-core:$springVersion"
+    implementation "org.springframework:spring-context:$springVersion"
+    implementation "org.aspectj:aspectjweaver:$aspectJVersion"
+    implementation "com.h2database:h2:1.4.196"
+    implementation 'org.hibernate:hibernate-core:5.2.10.Final'
+    implementation 'org.hibernate:hibernate-ehcache:5.2.10.Final'
+    implementation 'com.googlecode.log4jdbc:log4jdbc:1.2'
 }
