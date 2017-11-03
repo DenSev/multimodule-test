@@ -1,25 +1,53 @@
-import com.google.common.collect.Lists;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-
 /**
  * Created by Dzianis_Sevastseyenk on 04/13/2017.
  */
 public class App2 {
 
     public static void main(String... args) {
-        /*List<String> urls = StreamReader.readOther2Csv("D:/franchises.txt", (line) -> {
-            line = line.split(":")[1];
-            line = line.substring(2, line.length() - 1);
-            line = "" + line;
-            return line;
-        });*/
+        /*Integer test = 0;
 
 
+        System.out.println((double) test == 0.0);
+
+        Optional<Integer> num = Stream.iterate(0, n-> n+1)
+            .filter(number -> number % 2 == 0)
+            .filter(n -> n >= 5)
+            .map(n->n*2)
+            .limit(20)
+            .findAny();
+
+        System.out.println(num);
+*/
+        String s1 = "1234567890";
+
+        String s2 = "67890";
+
+        System.out.println(s1.substring(0, s1.length() - s2.length()));
+
+
+        /*List<String> urls = StreamReader.readOther2Csv("D:/test.txt", (line) -> {
+            List<String> urlParts = new ArrayList<>();
+
+            for( String s: line.split("\\?")){
+                Collections.addAll(urlParts, s.split("&"));
+            }
+            Collections.sort(urlParts);
+
+            StringBuilder sb = new StringBuilder(urlParts.get(0));
+            sb.append("?").append(urlParts.get(1));
+            for (int i = 2; i< urlParts.size(); i++){
+                sb.append("&").append(urlParts.get(i));
+            }
+            return sb.toString();
+        });
+
+
+        Set<String> set = new HashSet<>(urls);
+
+        for (String s: set){
+            System.out.println(s);
+        }*/
+/*
         String fields1 = "make:model:year";
         String fields2 = "make:model:subModel";
         String fields3 = "util:ooo";
@@ -39,7 +67,7 @@ public class App2 {
             .forEach(list -> System.out.println(list));
         for (int i = 0; i < ints.length / 3; i++) {
             System.out.println(Arrays.asList(ints).subList(i * 3, (i + 1) * 3));
-        }
+        }*/
 
 
        /* for (String item : fields) {
