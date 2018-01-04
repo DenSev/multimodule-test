@@ -15,6 +15,8 @@ public class TestEntity {
     @Id
     private Integer id;
 
+    public TestEntity() {
+    }
 
     public TestEntity(String name, Integer id) {
         this.name = name;
@@ -35,5 +37,14 @@ public class TestEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+
+    @Override
+    public String toString() {
+        return "TestEntity{" +
+            "name='" + name + '\'' +
+            ", id=" + id +
+            '}';
     }
 }

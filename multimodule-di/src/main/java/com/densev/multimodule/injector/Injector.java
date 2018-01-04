@@ -100,10 +100,8 @@ public enum Injector {
             /*.filter(constructor -> constructor.isAnnotationPresent(Wired.class))*/
             .map(constructor -> {
                 try {
-                    List<Object> constructorArgs = Arrays.stream(constructor.getParameters())
-                        .map(parameter -> getBean(parameter.getType()))
-                        .collect(Collectors.toList());
-                    return (T) constructor.newInstance(constructorArgs.toArray());
+                    return (T) constructor.newInstance(Arrays.stream(constructor.getParameters())
+                        .map(parameter -> getBean(parameter.getType())).toArray());
                 } catch (ReflectiveOperationException e) {
                     LOG.error(
                         "Error while instantiating instance of class {}. \n {}",
