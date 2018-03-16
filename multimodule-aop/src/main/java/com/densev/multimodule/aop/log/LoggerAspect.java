@@ -1,4 +1,4 @@
-package com.densev.multimodule.aop;
+package com.densev.multimodule.aop.log;
 
 import com.google.common.collect.Lists;
 import org.aspectj.lang.ProceedingJoinPoint;

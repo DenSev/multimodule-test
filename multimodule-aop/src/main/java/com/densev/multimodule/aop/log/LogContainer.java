@@ -1,4 +1,4 @@
-package com.densev.multimodule.aop;
+package com.densev.multimodule.aop.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

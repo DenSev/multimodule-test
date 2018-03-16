@@ -1,7 +1,8 @@
 package com.densev.multimodule.aop;
 
+import com.densev.multimodule.aop.log.LogContainer;
+import com.densev.multimodule.aop.spring.AppConfig;
 import org.h2.tools.Server;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -10,17 +11,15 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Dzianis_Sevastseyenk on 06/27/2017.
@@ -38,7 +37,7 @@ public class AopApp {
 
     public static void main(String... args) {
         try (ServerWrapper server = new ServerWrapper(Server.createTcpServer(args).start())) {
-            ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+            ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
             AopApp application = context.getBean(AopApp.class);
             application.run();
             server.status();

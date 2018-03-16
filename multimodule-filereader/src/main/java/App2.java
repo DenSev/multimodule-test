@@ -1,9 +1,189 @@
+import org.apache.commons.lang3.tuple.Pair;
+import org.elasticsearch.action.admin.cluster.shards.ClusterSearchShardsRequest;
+import org.elasticsearch.action.admin.cluster.shards.ClusterSearchShardsResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchScrollRequest;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.Scroll;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+
 /**
  * Created by Dzianis_Sevastseyenk on 04/13/2017.
  */
 public class App2 {
 
-    public static void main(String... args) {
+    public static void main(String... args) throws Exception {
+        Client client = new ElasticsearchClientProvider()
+            .init("es-lease-deals-2-qa-21", "es-lease-deals-2.qa-21.vip.aws2", 9300);
+
+        //870, 1417, 1803151, 1544
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+            .query(termsQuery("dealer.rooftopId", "870", "1417", "1803151", "1544"))
+            .size(100)
+            .fetchSource(true);
+
+        Map<String, String> routingToShardsMap = getRoutingToShardsMap(client);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
+        ConcurrentSkipListSet<String> ids = new ConcurrentSkipListSet<String>();
+        for (Entry<String, String> map : routingToShardsMap.entrySet()) {
+            executorService.submit(() -> {
+
+                try {
+                    SearchRequest searchRequest = new SearchRequest(new String[]{"lease-deals"}, searchSourceBuilder).types("lease-deal");
+                    searchRequest.scroll(TimeValue.timeValueMinutes(5)).routing(map.getValue());
+                    SearchResponse searchResponse = client.search(searchRequest).get();
+
+                    do {
+                        for (SearchHit hit : searchResponse.getHits().getHits()) {
+                            if (hit.getSource() != null
+                                && !hit.getSource().isEmpty()) {
+                                Object node = getNode(hit.getSource(), "leaseDeals");
+                                if (((ArrayList) node).size() < 11) {
+                                    System.out.println(hit.getId() + " " + getNode(hit.getSource(), "dealer", "rooftopId") + " " + ((ArrayList) node).size()  );
+                                }
+                            }
+                        }
+                        SearchScrollRequest scrollRequest = new SearchScrollRequest(searchResponse.getScrollId());
+                        scrollRequest.scroll(new Scroll(TimeValue.timeValueMinutes(5)));
+                        searchResponse = client.searchScroll(scrollRequest).actionGet();
+
+                    } while (searchResponse.getHits().getHits().length != 0);
+
+                } catch (InterruptedException | ExecutionException e) {
+
+                }
+
+
+            });
+        }
+        executorService.shutdown();
+    }
+
+
+    /**
+     * Returns first element for key from provided collection of pairs, while also removing it, or null if there
+     * are no elements with such key. collection provided in param will have its state adjusted.
+     *
+     * @param collection - collection of pairs
+     * @param key        - key of pair
+     * @return - value of pair for key in params or null if no pair with such key was found
+     */
+    public static String removeValueForKey(Collection<Pair<String, String>> collection, String key) {
+        /*if (CollectionUtils.isNotEmpty(collection)) {
+            Iterator<Pair<String, String>> iterator = collection.iterator();
+            while (iterator.hasNext()) {
+                Pair<String, String> pair = iterator.next();
+                if (key.equals(pair.getKey())) {
+                    iterator.remove();
+                    return pair.getValue();
+                }
+            }
+        }*/
+        return null;
+    }
+
+    /**
+     * Same as {@code removeValueForKey}, but returns default value instead of null
+     *
+     * @param collection   - collection of pairs
+     * @param key          - key of pair
+     * @param defaultValue - defaultValue to be returned if no such key exists in collection
+     * @return - value of pair for key in params or defaultValue if no pair with such key was found
+     */
+    public static String removeValueForKeyOrGetDefault(Collection<Pair<String, String>> collection, String key, String defaultValue) {
+        String value = removeValueForKey(collection, key);
+        return value != null ? value : defaultValue;
+    }
+
+    /**
+     * Retrieves value from nested map of maps, fields param represents path to value
+     *
+     * @param node   map of maps
+     * @param fields - field path, must be sequence of map key passed in order of map nesting
+     * @return - node value or null
+     */
+    public static Object getNode(Map node, String... fields) {
+        Object childNode = node.get(fields[0]);
+        for (int i = 1; i < fields.length; i++) {
+            if (childNode != null) {
+                childNode = ((Map) childNode).get(fields[i]);
+            }
+        }
+        return childNode;
+    }
+
+    public static void putNodeValue(Map node, Object value, String... fields) {
+        Object childNode = node.get(fields[0]);
+        for (int i = 1; i < fields.length - 1; i++) {
+            if (childNode != null) {
+                childNode = ((Map) childNode).get(fields[i]);
+            }
+        }
+        if (childNode != null) {
+            ((Map) childNode).put(fields[fields.length - 1], value);
+        }
+    }
+
+    /**
+     * Pulls value from nested map of maps, fields param represents path to value
+     *
+     * @param node   map of maps
+     * @param fields - field path, must be sequence of map key passed in order of map nesting
+     * @return - node value or null
+     */
+    public static Object getAndRemoveNode(Map node, String... fields) {
+        Object childNode = node.get(fields[0]);
+        for (int i = 1; i < fields.length; i++) {
+            if (childNode != null) {
+                if (i == fields.length - 1) {
+                    childNode = ((Map) childNode).remove(fields[i]);
+                } else {
+                    childNode = ((Map) childNode).get(fields[i]);
+                }
+            }
+        }
+        return childNode;
+    }
+
+    private static Map<String, String> getRoutingToShardsMap(Client client) throws InterruptedException, ExecutionException {
+        int shardsNumber = client.admin().cluster().prepareSearchShards("lease-deals").get().getGroups().length;
+
+        Map<String, String> shardToRoutingIndexMap = new HashMap<>(shardsNumber);
+        int routingIndex = 0;
+
+        while (shardToRoutingIndexMap.size() < shardsNumber) {
+            String routingParam = String.valueOf(routingIndex);
+            ClusterSearchShardsResponse clusterSearchShardsResponse = client.admin().cluster()
+                .searchShards(new ClusterSearchShardsRequest("lease-deals").routing(routingParam)).get();
+            routingIndex++;
+
+            int shardIndex = clusterSearchShardsResponse.getGroups()[0].getShards()[0].getId();
+            shardToRoutingIndexMap.put(String.valueOf(shardIndex), routingParam);
+        }
+
+        return shardToRoutingIndexMap;
+    }
+
+    public void test(String... args) {
         /*Integer test = 0;
 
 

@@ -19,6 +19,10 @@ apply from: 'clover.gradle'
 sourceCompatibility = 1.8
 
 ext {
+    elasticVersion = '5.1.1'
+    log4jVersion = '2.7'
+    jclSlf4jVersion = '1.7.12'
+
     logbackVersion = '1.1.8'
     testNgVersion = '6.9.12'
     mockitoVersion = '1.10.19'
@@ -38,9 +42,14 @@ subprojects {
 
     dependencies {
         compile "com.google.guava:guava:21.0"
-        compile "ch.qos.logback:logback-classic:${logbackVersion}"
-        testCompile "org.mockito:mockito-all:${mockitoVersion}"
-        testCompile "org.testng:testng:${testNgVersion}"
+        //logging
+        compile "ch.qos.logback:logback-classic:$logbackVersion"
+        compile "org.slf4j:jcl-over-slf4j:$jclSlf4jVersion"
+        compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+        compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+        //tests
+        testCompile "org.mockito:mockito-all:$mockitoVersion"
+        testCompile "org.testng:testng:$testNgVersion"
     }
 }
 
