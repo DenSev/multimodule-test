@@ -2,12 +2,20 @@ group 'com.densev.multimodule'
 version '1.0-SNAPSHOT'
 
 buildscript {
+    ext {
+        springBootVersion = '2.1.0.BUILD-SNAPSHOT'
+    }
     repositories {
         jcenter()
         mavenLocal()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+
     }
     dependencies {
         classpath 'com.bmuschko:gradle-clover-plugin:2.1.2'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
     }
 }
 
@@ -29,6 +37,11 @@ ext {
     googleGuavaVersion = '20.0'
     springVersion = '4.3.9.RELEASE'
     aspectJVersion = '1.8.10'
+
+    googleGuavaVersion = '20.0'
+    jclSlf4jVersion = '1.7.25'
+    elasticsearchVersion = '6.3.0'
+
 }
 
 project.configurations {
@@ -60,6 +73,9 @@ allprojects {
         mavenLocal()
         mavenCentral()
         jcenter()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+
     }
 
     test {

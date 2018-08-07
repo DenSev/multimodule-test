@@ -1,0 +1,23 @@
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-aop')
+    compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb:2.0.4.BUILD-SNAPSHOT')
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    runtime('org.postgresql:postgresql')
+
+    compile('org.springframework.boot:spring-boot-starter-jersey')
+    compile('org.springframework.boot:spring-boot-starter-logging')
+    compile "com.google.guava:guava:$googleGuavaVersion"
+    compile "org.elasticsearch.client:elasticsearch-rest-client-sniffer:$elasticsearchVersion"
+    compile "org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion"
+    compile 'org.apache.commons:commons-lang3:3.7'
+    compile "org.apache.commons:commons-collections4:4.1"
+    compile 'commons-dbutils:commons-dbutils:1.6'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}

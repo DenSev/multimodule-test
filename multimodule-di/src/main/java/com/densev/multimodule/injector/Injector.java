@@ -52,8 +52,8 @@ public enum Injector {
             return instance;
 
         } else {
-            LOG.error("Cannot wire a non wireable class: {}", clazz.getName());
-            throw new RuntimeException("Cannot wire a non wireable class");
+            LOG.error("Cannot wire a non-wireable class: {}", clazz.getName());
+            throw new RuntimeException("Cannot wire a non-wireable class");
         }
     }
 
