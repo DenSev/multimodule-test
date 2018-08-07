@@ -26,9 +26,6 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class ElasticsearchRepository implements Repository {
 
@@ -38,7 +35,6 @@ public class ElasticsearchRepository implements Repository {
     private ObjectMapper mapper;
     private String address;
     private int port;
-    private final ExecutorService requestExecutor;
 
     public ElasticsearchRepository(RestHighLevelClient client,
                                    ObjectMapper mapper,
@@ -48,17 +44,12 @@ public class ElasticsearchRepository implements Repository {
         this.mapper = mapper;
         this.address = address;
         this.port = port;
-        this.requestExecutor = Executors.newSingleThreadExecutor();
     }
 
     @PreDestroy
     public void terminate() {
-        try {
-            LOG.info("Called terminate on Elasticsearch connection: {}:{}", address, port);
-            requestExecutor.awaitTermination(50, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+
+
     }
 
     public void getResponse() {
@@ -149,7 +140,4 @@ public class ElasticsearchRepository implements Repository {
         return port;
     }
 
-    public ExecutorService getExecutor() {
-        return requestExecutor;
-    }
 }

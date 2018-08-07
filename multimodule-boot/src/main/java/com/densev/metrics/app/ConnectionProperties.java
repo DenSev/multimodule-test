@@ -1,7 +1,10 @@
 package com.densev.metrics.app;
 
+import java.util.Arrays;
+
 public class ConnectionProperties {
 
+    private DataSource dataSource;
     private String url;
     private int port;
     private String dbName;
@@ -11,7 +14,8 @@ public class ConnectionProperties {
     public ConnectionProperties() {
     }
 
-    public ConnectionProperties(String url, int port, String dbName, String user, String password) {
+    public ConnectionProperties(String dataSource, String url, int port, String dbName, String user, String password) {
+        this.dataSource = DataSource.valueOf(dataSource);
         this.url = url;
         this.port = port;
         this.dbName = dbName;
@@ -57,5 +61,24 @@ public class ConnectionProperties {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDataSourceName() {
+        return dataSource.name();
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(String dataSource) {
+        this.dataSource = DataSource.valueOf(dataSource);
+    }
+
+    public enum DataSource {
+        ELASTICSEARCH,
+        MONGODB,
+        POSTGRE;
+
     }
 }

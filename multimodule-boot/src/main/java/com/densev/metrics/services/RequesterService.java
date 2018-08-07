@@ -2,7 +2,6 @@ package com.densev.metrics.services;
 
 
 import com.densev.metrics.repository.Repository;
-import com.densev.metrics.repository.elastic.ElasticsearchRepository;
 import com.densev.metrics.repository.mongodb.MongoRepository;
 import com.densev.metrics.repository.postgre.PostgreRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,7 +12,6 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PreDestroy;
@@ -35,16 +33,13 @@ public class RequesterService {
     private final ObjectMapper mapper;
 
     @Autowired
-    public RequesterService(@Qualifier("localElasticRepository") ElasticsearchRepository elasticsearchRepository,
-                            @Qualifier("dockerElasticRepository") ElasticsearchRepository dockerRepository,
-                            MongoRepository mongoRepository,
+    public RequesterService(MongoRepository mongoRepository,
                             PostgreRepository postgreRepository,
                             ObjectMapper mapper) {
 
         this.mapper = mapper;
         this.repositoryMap = ImmutableMap
             .<String, List<Repository>>builder()
-            .put("elastic", Lists.newArrayList(elasticsearchRepository, dockerRepository))
             .put("mongo", Lists.newArrayList(mongoRepository))
             .put("postgre", Lists.newArrayList(postgreRepository))
             .build();
@@ -59,7 +54,7 @@ public class RequesterService {
             }
             List<String> results = new ArrayList<>();
             for (Repository repository : repositoryList) {
-                results.add(mapper.writeValueAsString(repository.query(query)));
+                results.add(mapper.writeValueAsString(repository.search(query)));
             }
 
             return results.toString();

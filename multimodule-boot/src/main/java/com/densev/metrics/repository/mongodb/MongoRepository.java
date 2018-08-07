@@ -1,8 +1,11 @@
 package com.densev.metrics.repository.mongodb;
 
+import com.densev.metrics.app.ConfigProvider;
+import com.densev.metrics.app.ConnectionProperties;
 import com.densev.metrics.model.Data;
 import com.densev.metrics.model.Metadata;
 import com.densev.metrics.repository.Repository;
+import com.densev.metrics.util.TransactionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -11,9 +14,9 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.apache.commons.collections4.CollectionUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +26,6 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import static com.densev.metrics.model.Metadata.State;
@@ -36,29 +36,32 @@ public class MongoRepository implements Repository {
     private static final Logger LOG = LoggerFactory.getLogger(MongoRepository.class);
 
     private MongoClient client;
-    @Autowired
     private ObjectMapper mapper;
     private String address;
     private int port;
 
-    private final ExecutorService executorService;
+    @Autowired
+    public MongoRepository(ObjectMapper mapper,
+                           ConfigProvider configProvider) {
+        this.mapper = mapper;
 
-    public MongoRepository() {
-        this.address = "localhost";
-        this.port = 27017;
-        this.client = new MongoClient(address, port);
-        this.executorService = Executors.newSingleThreadExecutor();
+        List<ConnectionProperties> connections = configProvider.getConnectionsForDataSource(ConnectionProperties.DataSource.MONGODB);
+        if (CollectionUtils.isNotEmpty(connections)) {
+            ConnectionProperties connection = connections.get(0);
+
+            this.address = connection.getUrl();
+            this.port = connection.getPort();
+
+            this.client = new MongoClient(address, port);
+        } else {
+            throw new RuntimeException("No configuration for MONGODB data source type found");
+        }
     }
 
     @PreDestroy
     public void terminate() {
-        try {
-            LOG.info("Called terminate on mongoDB connection: {}:{}", address, port);
-            client.close();
-            executorService.awaitTermination(50, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+        LOG.info("Called terminate on mongoDB connection: {}:{}", address, port);
+        client.close();
     }
 
     @Override
@@ -112,7 +115,7 @@ public class MongoRepository implements Repository {
         }
         try {
             BasicDBObject idQuery = new BasicDBObject();
-            idQuery.put("_id",data.get_id());
+            idQuery.put("_id", data.get_id());
 
             Data foundData = getObject(idQuery);
 
@@ -123,7 +126,7 @@ public class MongoRepository implements Repository {
                     data.setVersion(foundData.getVersion() + 1);
 
                     BasicDBObject idQueryUpdated = new BasicDBObject();
-                    idQueryUpdated.put("_id",  data.get_id());
+                    idQueryUpdated.put("_id", data.get_id());
                     idQueryUpdated.put("version", foundData.getVersion());
 
                     saveDirty(idQueryUpdated, foundData);
@@ -137,7 +140,7 @@ public class MongoRepository implements Repository {
                 saveCommittedData(null, data, null);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new TransactionException(e.getMessage(), e);
         }
     }
 
@@ -165,7 +168,7 @@ public class MongoRepository implements Repository {
             }
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new TransactionException(e.getMessage(), e);
         }
     }
 
@@ -173,9 +176,9 @@ public class MongoRepository implements Repository {
 
         MongoDatabase database = client.getDatabase("test");
         MongoCollection collection = database.getCollection("posts");
-        
+
         newData.setMetadata(null);
-        
+
         oldData.setMetadata(new Metadata(State.DIRTY_COMMITTED, newData));
         Object obj = collection.findOneAndUpdate(query, getDBObject(oldData));
     }
@@ -199,7 +202,7 @@ public class MongoRepository implements Repository {
             }
             return null;
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new TransactionException(e.getMessage(), e);
         }
     }
 
@@ -213,8 +216,4 @@ public class MongoRepository implements Repository {
         return port;
     }
 
-    @Override
-    public ExecutorService getExecutor() {
-        return this.executorService;
-    }
 }
