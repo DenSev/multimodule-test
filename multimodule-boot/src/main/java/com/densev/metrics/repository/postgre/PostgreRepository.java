@@ -84,10 +84,36 @@ public class PostgreRepository implements Repository {
         }
     }
 
+    public void save(Data data) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO public.data VALUES(?, ?, ?)")) {
+            connection.setAutoCommit(false);
+            statement.setString(1, data.getUserName());
+            statement.setString(2, data.getText());
+            statement.setInt(3, data.getStars());
+
+            int i = statement.executeUpdate();
+            connection.commit();
+            LOG.debug("Rows updated: {}", i);
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+            throw new RuntimeException(e.getMessage(), e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        }
+    }
+
     @Override
     public String search(String query) {
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
 
             /*while (resultSet.next()) {
                 resultSet.
