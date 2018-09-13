@@ -47,8 +47,8 @@ public class PostgreRepository implements Repository {
         return result;
     };
 
-
-    public PostgreRepository(@Autowired ObjectMapper mapper,
+    @Autowired
+    public PostgreRepository(ObjectMapper mapper,
                              ConfigProvider configProvider) {
 
         List<ConnectionProperties> connections = configProvider.getConnectionsForDataSource(ConnectionProperties.DataSource.POSTGRE);
