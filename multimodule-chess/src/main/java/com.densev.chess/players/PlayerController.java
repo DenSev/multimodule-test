@@ -8,6 +8,9 @@ import com.densev.chess.game.board.File;
 import com.densev.chess.game.board.Piece;
 import com.densev.chess.game.moves.Move;
 import com.densev.chess.game.moves.Position;
+import com.densev.chess.util.Input;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -18,6 +21,8 @@ import java.util.Scanner;
  */
 public class PlayerController extends Controller {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PlayerController.class);
+
     public PlayerController(Board board, Color color) {
         super(board, color);
     }
@@ -26,8 +31,8 @@ public class PlayerController extends Controller {
         Scanner consoleScanner = new Scanner(System.in);
 
         boolean hasNotMadeAMove = true;
-        String input = null;
-        while (!"exit".equals(input) && hasNotMadeAMove) {
+
+        while (hasNotMadeAMove) {
             // get x, y of piece to move
             // get piece at x, y
             Map.Entry<Position, File> pieceAndPosition = getPieceAndPosition(consoleScanner);
@@ -51,21 +56,16 @@ public class PlayerController extends Controller {
             // check for check
 
             hasNotMadeAMove = false;
-
-            input = consoleScanner.nextLine();
         }
 
-        if ("exit".equals(input)) {
-            System.exit(0);
-        }
         return false;
     }
 
     private Position getPiecePosition(Scanner scanner) {
         System.out.println("Enter x of piece to move: ");
-        int x = scanner.nextInt();
+        int x = Input.getNumber();
         System.out.println("Enter y of piece to move: ");
-        int y = scanner.nextInt();
+        int y = Input.getNumber();
 
         return new Position(x, y);
     }
