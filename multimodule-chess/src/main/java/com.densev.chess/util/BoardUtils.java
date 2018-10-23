@@ -21,7 +21,7 @@ public final class BoardUtils {
 
     private static boolean breakOrAddAndContinue(Board board, List<Position> positions, Cell cellMoved, int x, int y) {
         //break when out of bounds
-        if(!isInBounds(x, y)) {
+        if (!isInBounds(x, y)) {
             return true;
         }
         Cell cellAt = board.fileAt(x, y);
@@ -45,36 +45,24 @@ public final class BoardUtils {
 
         // upper right
         for (int i = 1; i <= Board.BOARD_SIZE; i++) {
-            if (x + i > Board.BOARD_SIZE || y + i > Board.BOARD_SIZE) {
-                break;
-            }
             if (breakOrAddAndContinue(board, availablePositions, cellMoved, x + i, y + i)) {
                 break;
             }
         }
         //upper left
         for (int i = 1; i <= Board.BOARD_SIZE; i++) {
-            if (x - i < 0 || y + i > Board.BOARD_SIZE) {
-                break;
-            }
             if (breakOrAddAndContinue(board, availablePositions, cellMoved, x - i, y + i)) {
                 break;
             }
         }
         //lower right
         for (int i = 1; i <= Board.BOARD_SIZE; i++) {
-            if (x + i > Board.BOARD_SIZE || y - i < 0) {
-                break;
-            }
             if (breakOrAddAndContinue(board, availablePositions, cellMoved, x + i, y - i)) {
                 break;
             }
         }
         //lower left
         for (int i = 1; i <= Board.BOARD_SIZE; i++) {
-            if (x - i > 0 || y - i < 0) {
-                break;
-            }
             if (breakOrAddAndContinue(board, availablePositions, cellMoved, x - i, y - i)) {
                 break;
             }
