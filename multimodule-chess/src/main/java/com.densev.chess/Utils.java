@@ -20,13 +20,14 @@ public final class Utils {
     }
 
     private static boolean breakOrAddAndContinue(Board board, List<Position> positions, File fileMoved, int x, int y) {
+        //break when out of bounds
         if(!isInBounds(x, y)) {
-            return false;
+            return true;
         }
         File fileAt = board.fileAt(x, y);
-        // should not break if we find piece of the same team, but should not add position
+        // should break if we find piece of the same team
         if (fileAt.isNotEmpty() && fileAt.isNotOpposing(fileMoved)) {
-            return false;
+            return true;
         }
         positions.add(new Position(x, y));
         // break if position added is of piece of opposing team
@@ -43,38 +44,38 @@ public final class Utils {
         List<Position> availablePositions = new ArrayList<>();
 
         // upper right
-        for (int i = 1; i <= Board.BOARD_SIZE / 2; i++) {
+        for (int i = 1; i <= Board.BOARD_SIZE; i++) {
             if (x + i > Board.BOARD_SIZE || y + i > Board.BOARD_SIZE) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x + i, y + 1)) {
+            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x + i, y + i)) {
                 break;
             }
         }
         //upper left
-        for (int i = 1; i <= Board.BOARD_SIZE / 2; i++) {
+        for (int i = 1; i <= Board.BOARD_SIZE; i++) {
             if (x - i < 0 || y + i > Board.BOARD_SIZE) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x - i, y + 1)) {
+            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x - i, y + i)) {
                 break;
             }
         }
         //lower right
-        for (int i = 1; i <= Board.BOARD_SIZE / 2; i++) {
+        for (int i = 1; i <= Board.BOARD_SIZE; i++) {
             if (x + i > Board.BOARD_SIZE || y - i < 0) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x + i, y - 1)) {
+            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x + i, y - i)) {
                 break;
             }
         }
         //lower left
-        for (int i = 1; i <= Board.BOARD_SIZE / 2; i++) {
+        for (int i = 1; i <= Board.BOARD_SIZE; i++) {
             if (x - i > 0 || y - i < 0) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x - i, y - 1)) {
+            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x - i, y - i)) {
                 break;
             }
         }

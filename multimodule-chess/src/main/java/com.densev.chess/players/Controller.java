@@ -2,11 +2,15 @@ package com.densev.chess.players;
 
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created on: 10/23/18
  */
 public abstract class Controller {
+
+    private static final Logger log = LoggerFactory.getLogger(Controller.class);
 
     Board board;
     Color controlledColor;
@@ -46,7 +50,7 @@ public abstract class Controller {
     private void check() {
         Color color = board.checkBoard();
         if (color != null) {
-            System.out.println(color + " king has been checked!");
+            log.info(color + " king has been checked!");
         }
     }
 }

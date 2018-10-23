@@ -14,34 +14,32 @@ import org.slf4j.LoggerFactory;
 
 import java.util.AbstractMap;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * Created on: 10/23/18
  */
 public class PlayerController extends Controller {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PlayerController.class);
+    private static final Logger log = LoggerFactory.getLogger(PlayerController.class);
 
     public PlayerController(Board board, Color color) {
         super(board, color);
     }
 
     public boolean makeAMove() {
-        Scanner consoleScanner = new Scanner(System.in);
 
         boolean hasNotMadeAMove = true;
 
         while (hasNotMadeAMove) {
             // get x, y of piece to move
             // get piece at x, y
-            Map.Entry<Position, File> pieceAndPosition = getPieceAndPosition(consoleScanner);
+            Map.Entry<Position, File> pieceAndPosition = getPieceAndPosition();
             Position initialPosition = pieceAndPosition.getKey();
             File file = pieceAndPosition.getValue();
 
             Move move = Application.PIECE_MOVEMENT.get(file.getPiece());
 
-            Position newPosition = getValidNewPosition(consoleScanner, move, initialPosition);
+            Position newPosition = getValidNewPosition(move, initialPosition);
 
             boolean checkmate = move.move(initialPosition, newPosition);
 
@@ -61,62 +59,60 @@ public class PlayerController extends Controller {
         return false;
     }
 
-    private Position getPiecePosition(Scanner scanner) {
-        System.out.println("Enter x of piece to move: ");
+    private Position getPiecePosition() {
+        log.info("Enter x of piece to move: ");
         int x = Input.getNumber();
-        System.out.println("Enter y of piece to move: ");
+        log.info("Enter y of piece to move: ");
         int y = Input.getNumber();
 
         return new Position(x, y);
     }
 
-    private Map.Entry<Position, File> getPieceAndPosition(Scanner scanner) {
-        Position position = getPiecePosition(scanner);
+    private Map.Entry<Position, File> getPieceAndPosition() {
+        Position position = getPiecePosition();
 
         if (!Utils.isInBounds(position.getX(), position.getY())) {
-            System.out.println("Your coordinates are out of bounds");
-            return getPieceAndPosition(scanner);
+            log.error("Your coordinates are out of bounds");
+            return getPieceAndPosition();
         }
         if (board.fileAt(position.getX(), position.getY()).isEmpty()) {
-            System.out.println("There is no piece at: " + position.getX() + "," + position.getY());
-            return getPieceAndPosition(scanner);
+            log.error("There is no piece at: {},{}", position.getX(), position.getY());
+            return getPieceAndPosition();
         }
         if (!controlledColor.equals(board.fileAt(position.getX(), position.getY()).getColor())) {
-            System.out.println("This is your opponent's piece. Please chose a new one.");
-            return getPieceAndPosition(scanner);
+            log.error("This is your opponent's piece. Please chose a new one.");
+            return getPieceAndPosition();
         }
 
         File fileWithPieceToMove = board.fileAt(position.getX(), position.getY());
-        System.out.println("You chose to move: " + fileWithPieceToMove.getPiece() + " " + fileWithPieceToMove.getRepresentation());
+        log.info("You chose to move: {} {}", fileWithPieceToMove.getPiece(), fileWithPieceToMove.getRepresentation());
         return new AbstractMap.SimpleImmutableEntry<>(position, fileWithPieceToMove);
     }
 
-    private Position getNewPosition(Scanner scanner) {
-        System.out.println("Enter x of where to move the piece: ");
-        int newX = scanner.nextInt();
-        System.out.println("Enter y of where to move the piece: ");
-        int newY = scanner.nextInt();
+    private Position getNewPosition() {
+        log.info("Enter x of where to move the piece: ");
+        int newX = Input.getNumber();
+        log.info("Enter y of where to move the piece: ");
+        int newY = Input.getNumber();
 
         return new Position(newX, newY);
     }
 
-    private Position getValidNewPosition(Scanner scanner, Move move, Position from) {
-        Position newPosition = getNewPosition(scanner);
+    private Position getValidNewPosition(Move move, Position from) {
+        log.debug("Available positions: {}", move.getAvailableMovePositions(from));
+        Position newPosition = getNewPosition();
 
         if (!Utils.isInBounds(newPosition.getX(), newPosition.getY())) {
-            System.out.println("Your coordinates are out of bounds");
-            System.out.println(move.getAvailableMovePositions(from));
-            return getValidNewPosition(scanner, move, from);
+            log.info("Your coordinates are out of bounds");
+            return getValidNewPosition(move, from);
         }
         if (controlledColor.equals(board.fileAt(newPosition.getX(), newPosition.getY()).getColor())) {
-            System.out.println("This space is occupied by one of your pieces. Please chose a new position.");
-            System.out.println(move.getAvailableMovePositions(from));
-            return getValidNewPosition(scanner, move, from);
+            log.info("This space is occupied by one of your pieces. Please chose a new position.");
+            return getValidNewPosition(move, from);
         }
         if (!move.canMoveTo(from, newPosition)) {
-            System.out.println("Your piece cannot move to this position");
-            System.out.println(move.getAvailableMovePositions(from));
-            return getValidNewPosition(scanner, move, from);
+            log.info("Your piece cannot move to this position");
+            return getValidNewPosition(move, from);
         }
         return newPosition;
     }

@@ -19,7 +19,6 @@ public class File {
         this.representation = representation;
     }
 
-
     public static File with(Piece piece, Color color) {
         return new File(piece, color, color.getRepresentation(piece));
     }

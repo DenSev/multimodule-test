@@ -21,4 +21,11 @@ public enum Color {
     public String getRepresentation(Piece piece) {
         return this.pieceRepresentations.get(piece);
     }
+
+    public Color getOpposite(){
+        if(BLACK.equals(this)){
+            return WHITE;
+        }
+        return BLACK;
+    }
 }

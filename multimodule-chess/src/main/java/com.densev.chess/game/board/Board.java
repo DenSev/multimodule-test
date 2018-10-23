@@ -3,6 +3,8 @@ package com.densev.chess.game.board;
 
 import com.densev.chess.Application;
 import com.densev.chess.game.moves.Position;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +19,9 @@ import static com.densev.chess.game.board.Piece.*;
  */
 public class Board {
 
+    private static final Logger log = LoggerFactory.getLogger(Board.class);
     public static final int BOARD_SIZE = 8;
     private File[][] files;
-
 
     public void fillTheBoard() {
         this.files = new File[BOARD_SIZE][BOARD_SIZE];
@@ -60,11 +62,16 @@ public class Board {
 
     public void print() {
         for (int i = BOARD_SIZE - 1; i >= 0; i--) {
+            StringBuilder sb = new StringBuilder()
+                    .append("[")
+                    .append(i)
+                    .append("] ");
             for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.print(this.files[i][j].getRepresentation() + "\t");
+                sb.append(this.files[i][j].getRepresentation()).append("\t");
             }
-            System.out.println();
+            log.info(sb.toString());
         }
+        log.info("[X]\t[0]\t[1]\t[2]\t[3]\t[4]\t[5]\t[6]\t[7]");
     }
 
     public File[][] getFiles() {
@@ -86,7 +93,7 @@ public class Board {
      * @param color - color of pieces to search for
      * @return - map with position and file
      */
-    public Map<Position, File> getFilesOfColor(Color color) {
+    private Map<Position, File> getFilesOfColor(Color color) {
 
         Map<Position, File> positionsOfPieces = new HashMap<>();
 
@@ -102,7 +109,7 @@ public class Board {
         return positionsOfPieces;
     }
 
-    public Position getPositionOfPiece(Piece piece, Color color) {
+    private Position getPositionOfPiece(Piece piece, Color color) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
 
@@ -122,7 +129,7 @@ public class Board {
         final boolean blackKingChecked = checkForPieces(whitePieces, blackKingPosition);
 
         if (blackKingChecked) {
-            return Color.WHITE;
+            return Color.BLACK;
         }
 
         final Map<Position, File> blackPieces = getFilesOfColor(BLACK);
@@ -130,18 +137,18 @@ public class Board {
         final boolean whiteKingChecked = checkForPieces(blackPieces, whiteKingPosition);
 
         if (whiteKingChecked) {
-            return Color.BLACK;
+            return Color.WHITE;
         }
 
         return null;
     }
 
-    public boolean checkForPieces(Map<Position, File> pieces, Position opposingKingPosition) {
+    private boolean checkForPieces(Map<Position, File> pieces, Position opposingKingPosition) {
         for (Map.Entry<Position, File> pieceAtPosition : pieces.entrySet()) {
             Piece piece = pieceAtPosition.getValue().getPiece();
             List<Position> positions = Application.PIECE_MOVEMENT
-                .get(piece)
-                .getAvailableMovePositions(pieceAtPosition.getKey());
+                    .get(piece)
+                    .getAvailableMovePositions(pieceAtPosition.getKey());
 
             if (positions.contains(opposingKingPosition)) {
                 return true;

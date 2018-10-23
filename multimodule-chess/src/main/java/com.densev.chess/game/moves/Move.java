@@ -4,6 +4,8 @@ import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.File;
 import com.densev.chess.game.board.Piece;
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -11,6 +13,8 @@ import java.util.List;
  * Created on: 10/23/18
  */
 public abstract class Move {
+
+    private static final Logger log = LoggerFactory.getLogger(Move.class);
 
     Board board;
 
@@ -32,12 +36,12 @@ public abstract class Move {
 
         if (fileAtTo.isNotEmpty()) {
             if (Piece.KING.equals(fileAtTo.getPiece())) {
-                System.out.println(fileAtTo.getColor() + " captured! Checkmate.");
+                log.info("{} king captured! Checkmate.", fileAtTo.getColor());
 
                 updatePositions(fileAtFrom, from, to);
                 return true;
             }
-            System.out.println("Captured: " + fileAtTo);
+            log.info("Captured: {}", fileAtTo);
         }
 
         updatePositions(fileAtFrom, from, to);
