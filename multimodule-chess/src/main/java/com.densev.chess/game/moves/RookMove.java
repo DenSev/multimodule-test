@@ -1,6 +1,6 @@
 package com.densev.chess.game.moves;
 
-import com.densev.chess.Utils;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 
 import java.util.List;
@@ -18,8 +18,8 @@ public class RookMove extends Move {
 
     @Override
     public List<Position> getAvailableMovePositions(Position from) {
-        List<Position> availablePositions = Utils.getHorizontalMovePositions(from, this.board);
-        availablePositions.addAll(Utils.getVerticalMovePositions(from, this.board));
+        List<Position> availablePositions = BoardUtils.getHorizontalMovePositions(from, this.board);
+        availablePositions.addAll(BoardUtils.getVerticalMovePositions(from, this.board));
 
         return availablePositions;
     }

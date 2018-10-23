@@ -1,6 +1,6 @@
 package com.densev.chess.game.moves;
 
-import com.densev.chess.Utils;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 
 import java.util.List;
@@ -18,6 +18,6 @@ public class BishopMove extends Move {
 
     @Override
     public List<Position> getAvailableMovePositions(Position from) {
-        return Utils.getDiagonalMovePositions(from, this.board);
+        return BoardUtils.getDiagonalMovePositions(from, this.board);
     }
 }

@@ -1,6 +1,6 @@
 package com.densev.chess.game.moves;
 
-import com.densev.chess.Utils;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Color;
@@ -34,13 +34,13 @@ public class PawnMove extends Move {
     public List<Position> getCapturable(final boolean orientationIsDown, Cell pawn, int x, int y) {
         List<Position> capturablePositions = new ArrayList<>();
         if (orientationIsDown) {
-            if (Utils.isInBounds(x - 1, y - 1)
+            if (BoardUtils.isInBounds(x - 1, y - 1)
                 && fileAt(x - 1, y - 1).isOpposing(pawn)) {
 
                 capturablePositions.add(new Position(x - 1, y - 1));
             }
 
-            if (Utils.isInBounds(x + 1, y - 1)
+            if (BoardUtils.isInBounds(x + 1, y - 1)
                 && fileAt(x + 1, y - 1).isOpposing(pawn)) {
 
                 capturablePositions.add(new Position(x + 1, y - 1));
@@ -49,13 +49,13 @@ public class PawnMove extends Move {
             return capturablePositions;
         }
 
-        if (Utils.isInBounds(x - 1, y + 1)
+        if (BoardUtils.isInBounds(x - 1, y + 1)
             && fileAt(x - 1, y + 1).isOpposing(pawn)) {
 
             capturablePositions.add(new Position(x - 1, y + 1));
         }
 
-        if (Utils.isInBounds(x + 1, y + 1)
+        if (BoardUtils.isInBounds(x + 1, y + 1)
             && fileAt(x + 1, y + 1).isOpposing(pawn)) {
 
             capturablePositions.add(new Position(x + 1, y + 1));
@@ -79,20 +79,20 @@ public class PawnMove extends Move {
         List<Position> availablePositions = getCapturable(orientationDown, pawn, x, y);
 
         if (orientationDown) {
-            if (Utils.isInBounds(x, y - 1) && board.fileAt(x, y - 1).isEmpty()) {
+            if (BoardUtils.isInBounds(x, y - 1) && board.fileAt(x, y - 1).isEmpty()) {
                 availablePositions.add(new Position(x, y - 1));
 
-                if (hasNotMovedYet && Utils.isInBounds(x, y - 2) && board.fileAt(x, y - 2).isEmpty()) {
+                if (hasNotMovedYet && BoardUtils.isInBounds(x, y - 2) && board.fileAt(x, y - 2).isEmpty()) {
                     availablePositions.add(new Position(x, y - 2));
                 }
             }
             return availablePositions;
         }
 
-        if (Utils.isInBounds(x, y + 1) && board.fileAt(x, y + 1).isEmpty()) {
+        if (BoardUtils.isInBounds(x, y + 1) && board.fileAt(x, y + 1).isEmpty()) {
             availablePositions.add(new Position(x, y + 1));
 
-            if (hasNotMovedYet && Utils.isInBounds(x, y + 2) && board.fileAt(x, y + 2).isEmpty()) {
+            if (hasNotMovedYet && BoardUtils.isInBounds(x, y + 2) && board.fileAt(x, y + 2).isEmpty()) {
                 availablePositions.add(new Position(x, y + 2));
             }
         }

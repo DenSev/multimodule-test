@@ -1,4 +1,4 @@
-package com.densev.chess;
+package com.densev.chess.util;
 
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Created on: 10/23/18
  */
-public final class Utils {
+public final class BoardUtils {
 
-    private Utils() {
+    private BoardUtils() {
     }
 
     public static boolean isInBounds(int x, int y) {

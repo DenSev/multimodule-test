@@ -1,7 +1,7 @@
 package com.densev.chess.players;
 
 import com.densev.chess.Application;
-import com.densev.chess.Utils;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Color;
@@ -71,7 +71,7 @@ public class PlayerController extends Controller {
     private Map.Entry<Position, Cell> getPieceAndPosition() {
         Position position = getPiecePosition();
 
-        if (!Utils.isInBounds(position.getX(), position.getY())) {
+        if (!BoardUtils.isInBounds(position.getX(), position.getY())) {
             log.error("Your coordinates are out of bounds");
             return getPieceAndPosition();
         }
@@ -102,7 +102,7 @@ public class PlayerController extends Controller {
         log.debug("Available positions: {}", move.getAvailableMovePositions(from));
         Position newPosition = getNewPosition();
 
-        if (!Utils.isInBounds(newPosition.getX(), newPosition.getY())) {
+        if (!BoardUtils.isInBounds(newPosition.getX(), newPosition.getY())) {
             log.info("Your coordinates are out of bounds");
             return getValidNewPosition(move, from);
         }

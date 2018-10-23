@@ -1,6 +1,6 @@
 package com.densev.chess.game.moves;
 
-import com.densev.chess.Utils;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class KingMove extends Move {
     }
 
     private Position available(int x, int y) {
-        if (Utils.isInBounds(x, y) && board.fileAt(x, y).isEmpty()) {
+        if (BoardUtils.isInBounds(x, y) && board.fileAt(x, y).isEmpty()) {
             return new Position(x, y);
         }
         return null;

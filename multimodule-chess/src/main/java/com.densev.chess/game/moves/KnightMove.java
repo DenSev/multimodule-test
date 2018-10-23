@@ -1,6 +1,6 @@
 package com.densev.chess.game.moves;
 
-import com.densev.chess.Utils;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
 
@@ -51,7 +51,7 @@ public class KnightMove extends Move {
     }
 
     private Position getIfAvailable(Cell cell, int x, int y) {
-        if (Utils.isInBounds(x, y)) {
+        if (BoardUtils.isInBounds(x, y)) {
             Cell targetCell = fileAt(x, y);
             if (targetCell.isOpposing(cell) || targetCell.isEmpty()) {
                 return new Position(x, y);

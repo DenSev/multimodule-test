@@ -1,6 +1,6 @@
 package com.densev.chess.game.moves;
 
-import com.densev.chess.Utils;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 
 import java.util.List;
@@ -18,9 +18,9 @@ public class QueenMove extends Move {
 
     @Override
     public List<Position> getAvailableMovePositions(Position from) {
-        List<Position> availablePositions = Utils.getDiagonalMovePositions(from, board);
-        availablePositions.addAll(Utils.getHorizontalMovePositions(from, board));
-        availablePositions.addAll(Utils.getVerticalMovePositions(from, board));
+        List<Position> availablePositions = BoardUtils.getDiagonalMovePositions(from, board);
+        availablePositions.addAll(BoardUtils.getHorizontalMovePositions(from, board));
+        availablePositions.addAll(BoardUtils.getVerticalMovePositions(from, board));
 
         return availablePositions;
     }
