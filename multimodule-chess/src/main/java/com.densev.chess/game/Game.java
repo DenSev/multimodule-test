@@ -62,6 +62,7 @@ public enum Game {
 
             boolean checkMate = false;
 
+            //game will continue until either stalemate or checkmate events were dispatched
             while (!checkMate) {
                 checkMate = humanPlayer.makeAMove();
                 BOARD.print();
