@@ -1,7 +1,7 @@
 package com.densev.chess.game.board;
 
 
-import com.densev.chess.Application;
+import com.densev.chess.game.Game;
 import com.densev.chess.game.moves.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,7 +146,7 @@ public class Board {
     private boolean checkForPieces(Map<Position, Cell> pieces, Position opposingKingPosition) {
         for (Map.Entry<Position, Cell> pieceAtPosition : pieces.entrySet()) {
             Piece piece = pieceAtPosition.getValue().getPiece();
-            List<Position> positions = Application.PIECE_MOVEMENT
+            List<Position> positions = Game.PIECE_MOVEMENT
                     .get(piece)
                     .getAvailableMovePositions(pieceAtPosition.getKey());
 

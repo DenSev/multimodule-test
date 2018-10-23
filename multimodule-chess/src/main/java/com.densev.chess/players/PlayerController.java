@@ -1,6 +1,6 @@
 package com.densev.chess.players;
 
-import com.densev.chess.Application;
+import com.densev.chess.game.Game;
 import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
@@ -37,7 +37,7 @@ public class PlayerController extends Controller {
             Position initialPosition = pieceAndPosition.getKey();
             Cell cell = pieceAndPosition.getValue();
 
-            Move move = Application.PIECE_MOVEMENT.get(cell.getPiece());
+            Move move = Game.PIECE_MOVEMENT.get(cell.getPiece());
 
             Position newPosition = getValidNewPosition(move, initialPosition);
 
