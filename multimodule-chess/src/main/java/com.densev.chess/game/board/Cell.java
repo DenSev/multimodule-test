@@ -3,28 +3,28 @@ package com.densev.chess.game.board;
 /**
  * Created on: 10/23/18
  */
-public class File {
+public class Cell {
 
     private Piece piece;
     private Color color;
     private String representation;
 
-    private File() {
+    private Cell() {
         this.representation = " ";
     }
 
-    private File(Piece piece, Color color, String representation) {
+    private Cell(Piece piece, Color color, String representation) {
         this.piece = piece;
         this.color = color;
         this.representation = representation;
     }
 
-    public static File with(Piece piece, Color color) {
-        return new File(piece, color, color.getRepresentation(piece));
+    public static Cell with(Piece piece, Color color) {
+        return new Cell(piece, color, color.getRepresentation(piece));
     }
 
-    public static File empty() {
-        return new File();
+    public static Cell empty() {
+        return new Cell();
     }
 
     public boolean isNotEmpty() {
@@ -46,12 +46,12 @@ public class File {
         return piece;
     }
 
-    public boolean isNotOpposing(File file) {
-        return isEmpty() || file.isEmpty() || this.color.equals(file.getColor());
+    public boolean isNotOpposing(Cell cell) {
+        return isEmpty() || cell.isEmpty() || this.color.equals(cell.getColor());
     }
 
-    public boolean isOpposing(File file) {
-        return isNotEmpty() && file.isNotEmpty() && !isNotOpposing(file);
+    public boolean isOpposing(Cell cell) {
+        return isNotEmpty() && cell.isNotEmpty() && !isNotOpposing(cell);
     }
 
     @Override

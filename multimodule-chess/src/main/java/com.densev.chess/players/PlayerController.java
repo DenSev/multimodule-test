@@ -3,8 +3,8 @@ package com.densev.chess.players;
 import com.densev.chess.Application;
 import com.densev.chess.Utils;
 import com.densev.chess.game.board.Board;
+import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Color;
-import com.densev.chess.game.board.File;
 import com.densev.chess.game.board.Piece;
 import com.densev.chess.game.moves.Move;
 import com.densev.chess.game.moves.Position;
@@ -33,11 +33,11 @@ public class PlayerController extends Controller {
         while (hasNotMadeAMove) {
             // get x, y of piece to move
             // get piece at x, y
-            Map.Entry<Position, File> pieceAndPosition = getPieceAndPosition();
+            Map.Entry<Position, Cell> pieceAndPosition = getPieceAndPosition();
             Position initialPosition = pieceAndPosition.getKey();
-            File file = pieceAndPosition.getValue();
+            Cell cell = pieceAndPosition.getValue();
 
-            Move move = Application.PIECE_MOVEMENT.get(file.getPiece());
+            Move move = Application.PIECE_MOVEMENT.get(cell.getPiece());
 
             Position newPosition = getValidNewPosition(move, initialPosition);
 
@@ -47,7 +47,7 @@ public class PlayerController extends Controller {
                 return true;
             }
 
-            if (Piece.PAWN.equals(file.getPiece())) {
+            if (Piece.PAWN.equals(cell.getPiece())) {
                 // check pawn for promotion
             }
 
@@ -68,7 +68,7 @@ public class PlayerController extends Controller {
         return new Position(x, y);
     }
 
-    private Map.Entry<Position, File> getPieceAndPosition() {
+    private Map.Entry<Position, Cell> getPieceAndPosition() {
         Position position = getPiecePosition();
 
         if (!Utils.isInBounds(position.getX(), position.getY())) {
@@ -84,9 +84,9 @@ public class PlayerController extends Controller {
             return getPieceAndPosition();
         }
 
-        File fileWithPieceToMove = board.fileAt(position.getX(), position.getY());
-        log.info("You chose to move: {} {}", fileWithPieceToMove.getPiece(), fileWithPieceToMove.getRepresentation());
-        return new AbstractMap.SimpleImmutableEntry<>(position, fileWithPieceToMove);
+        Cell cellWithPieceToMove = board.fileAt(position.getX(), position.getY());
+        log.info("You chose to move: {} {}", cellWithPieceToMove.getPiece(), cellWithPieceToMove.getRepresentation());
+        return new AbstractMap.SimpleImmutableEntry<>(position, cellWithPieceToMove);
     }
 
     private Position getNewPosition() {

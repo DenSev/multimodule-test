@@ -21,41 +21,41 @@ public class Board {
 
     private static final Logger log = LoggerFactory.getLogger(Board.class);
     public static final int BOARD_SIZE = 8;
-    private File[][] files;
+    private Cell[][] cells;
 
     public void fillTheBoard() {
-        this.files = new File[BOARD_SIZE][BOARD_SIZE];
+        this.cells = new Cell[BOARD_SIZE][BOARD_SIZE];
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                this.files[i][j] = File.empty();
+                this.cells[i][j] = Cell.empty();
             }
         }
 
-        this.files[0][0] = File.with(ROOK, WHITE);
-        this.files[0][7] = File.with(ROOK, WHITE);
-        this.files[7][0] = File.with(ROOK, BLACK);
-        this.files[7][7] = File.with(ROOK, BLACK);
+        this.cells[0][0] = Cell.with(ROOK, WHITE);
+        this.cells[0][7] = Cell.with(ROOK, WHITE);
+        this.cells[7][0] = Cell.with(ROOK, BLACK);
+        this.cells[7][7] = Cell.with(ROOK, BLACK);
 
-        this.files[0][1] = File.with(KNIGHT, WHITE);
-        this.files[0][6] = File.with(KNIGHT, WHITE);
-        this.files[7][1] = File.with(KNIGHT, BLACK);
-        this.files[7][6] = File.with(KNIGHT, BLACK);
+        this.cells[0][1] = Cell.with(KNIGHT, WHITE);
+        this.cells[0][6] = Cell.with(KNIGHT, WHITE);
+        this.cells[7][1] = Cell.with(KNIGHT, BLACK);
+        this.cells[7][6] = Cell.with(KNIGHT, BLACK);
 
-        this.files[0][2] = File.with(BISHOP, WHITE);
-        this.files[0][5] = File.with(BISHOP, WHITE);
-        this.files[7][2] = File.with(BISHOP, BLACK);
-        this.files[7][5] = File.with(BISHOP, BLACK);
+        this.cells[0][2] = Cell.with(BISHOP, WHITE);
+        this.cells[0][5] = Cell.with(BISHOP, WHITE);
+        this.cells[7][2] = Cell.with(BISHOP, BLACK);
+        this.cells[7][5] = Cell.with(BISHOP, BLACK);
 
-        this.files[0][3] = File.with(QUEEN, WHITE);
-        this.files[7][3] = File.with(QUEEN, BLACK);
+        this.cells[0][3] = Cell.with(QUEEN, WHITE);
+        this.cells[7][3] = Cell.with(QUEEN, BLACK);
 
-        this.files[0][4] = File.with(KING, WHITE);
-        this.files[7][4] = File.with(KING, BLACK);
+        this.cells[0][4] = Cell.with(KING, WHITE);
+        this.cells[7][4] = Cell.with(KING, BLACK);
 
         for (int i = 0; i < BOARD_SIZE; i++) {
-            this.files[1][i] = File.with(PAWN, WHITE);
-            this.files[6][i] = File.with(PAWN, BLACK);
+            this.cells[1][i] = Cell.with(PAWN, WHITE);
+            this.cells[6][i] = Cell.with(PAWN, BLACK);
         }
     }
 
@@ -67,42 +67,42 @@ public class Board {
                     .append(i)
                     .append("] ");
             for (int j = 0; j < BOARD_SIZE; j++) {
-                sb.append(this.files[i][j].getRepresentation()).append("\t");
+                sb.append(this.cells[i][j].getRepresentation()).append("\t");
             }
             log.info(sb.toString());
         }
         log.info("[X]\t[0]\t[1]\t[2]\t[3]\t[4]\t[5]\t[6]\t[7]");
     }
 
-    public File[][] getFiles() {
-        return files;
+    public Cell[][] getCells() {
+        return cells;
     }
 
-    public void setFileAt(File file, int x, int y) {
-        this.files[y][x] = file;
+    public void setFileAt(Cell cell, int x, int y) {
+        this.cells[y][x] = cell;
     }
 
-    public File fileAt(int x, int y) {
-        return this.files[y][x];
+    public Cell fileAt(int x, int y) {
+        return this.cells[y][x];
     }
 
     /**
-     * Iterates through the board collecting all files with pieces of
+     * Iterates through the board collecting all cells with pieces of
      * required color
      *
      * @param color - color of pieces to search for
      * @return - map with position and file
      */
-    private Map<Position, File> getFilesOfColor(Color color) {
+    private Map<Position, Cell> getFilesOfColor(Color color) {
 
-        Map<Position, File> positionsOfPieces = new HashMap<>();
+        Map<Position, Cell> positionsOfPieces = new HashMap<>();
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
 
-                File fileAt = fileAt(i, j);
-                if (color.equals(fileAt.getColor())) {
-                    positionsOfPieces.put(new Position(i, j), fileAt);
+                Cell cellAt = fileAt(i, j);
+                if (color.equals(cellAt.getColor())) {
+                    positionsOfPieces.put(new Position(i, j), cellAt);
                 }
             }
         }
@@ -113,8 +113,8 @@ public class Board {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
 
-                File fileAt = fileAt(i, j);
-                if (color.equals(fileAt.getColor()) && piece.equals(fileAt.getPiece())) {
+                Cell cellAt = fileAt(i, j);
+                if (color.equals(cellAt.getColor()) && piece.equals(cellAt.getPiece())) {
                     return new Position(i, j);
                 }
             }
@@ -124,7 +124,7 @@ public class Board {
 
 
     public Color checkBoard() {
-        final Map<Position, File> whitePieces = getFilesOfColor(WHITE);
+        final Map<Position, Cell> whitePieces = getFilesOfColor(WHITE);
         final Position blackKingPosition = getPositionOfPiece(KING, BLACK);
         final boolean blackKingChecked = checkForPieces(whitePieces, blackKingPosition);
 
@@ -132,7 +132,7 @@ public class Board {
             return Color.BLACK;
         }
 
-        final Map<Position, File> blackPieces = getFilesOfColor(BLACK);
+        final Map<Position, Cell> blackPieces = getFilesOfColor(BLACK);
         final Position whiteKingPosition = getPositionOfPiece(KING, WHITE);
         final boolean whiteKingChecked = checkForPieces(blackPieces, whiteKingPosition);
 
@@ -143,8 +143,8 @@ public class Board {
         return null;
     }
 
-    private boolean checkForPieces(Map<Position, File> pieces, Position opposingKingPosition) {
-        for (Map.Entry<Position, File> pieceAtPosition : pieces.entrySet()) {
+    private boolean checkForPieces(Map<Position, Cell> pieces, Position opposingKingPosition) {
+        for (Map.Entry<Position, Cell> pieceAtPosition : pieces.entrySet()) {
             Piece piece = pieceAtPosition.getValue().getPiece();
             List<Position> positions = Application.PIECE_MOVEMENT
                     .get(piece)

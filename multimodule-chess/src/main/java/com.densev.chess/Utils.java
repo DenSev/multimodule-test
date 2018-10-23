@@ -1,7 +1,7 @@
 package com.densev.chess;
 
 import com.densev.chess.game.board.Board;
-import com.densev.chess.game.board.File;
+import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.moves.Position;
 
 import java.util.ArrayList;
@@ -19,19 +19,19 @@ public final class Utils {
         return x >= 0 && x < Board.BOARD_SIZE && y >= 0 && y < Board.BOARD_SIZE;
     }
 
-    private static boolean breakOrAddAndContinue(Board board, List<Position> positions, File fileMoved, int x, int y) {
+    private static boolean breakOrAddAndContinue(Board board, List<Position> positions, Cell cellMoved, int x, int y) {
         //break when out of bounds
         if(!isInBounds(x, y)) {
             return true;
         }
-        File fileAt = board.fileAt(x, y);
+        Cell cellAt = board.fileAt(x, y);
         // should break if we find piece of the same team
-        if (fileAt.isNotEmpty() && fileAt.isNotOpposing(fileMoved)) {
+        if (cellAt.isNotEmpty() && cellAt.isNotOpposing(cellMoved)) {
             return true;
         }
         positions.add(new Position(x, y));
         // break if position added is of piece of opposing team
-        if (fileAt.isOpposing(fileMoved)) {
+        if (cellAt.isOpposing(cellMoved)) {
             return true;
         }
         return false;
@@ -40,7 +40,7 @@ public final class Utils {
     public static List<Position> getDiagonalMovePositions(Position from, Board board) {
         final int x = from.getX();
         final int y = from.getY();
-        final File fileMoved = board.fileAt(x, y);
+        final Cell cellMoved = board.fileAt(x, y);
         List<Position> availablePositions = new ArrayList<>();
 
         // upper right
@@ -48,7 +48,7 @@ public final class Utils {
             if (x + i > Board.BOARD_SIZE || y + i > Board.BOARD_SIZE) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x + i, y + i)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, x + i, y + i)) {
                 break;
             }
         }
@@ -57,7 +57,7 @@ public final class Utils {
             if (x - i < 0 || y + i > Board.BOARD_SIZE) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x - i, y + i)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, x - i, y + i)) {
                 break;
             }
         }
@@ -66,7 +66,7 @@ public final class Utils {
             if (x + i > Board.BOARD_SIZE || y - i < 0) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x + i, y - i)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, x + i, y - i)) {
                 break;
             }
         }
@@ -75,7 +75,7 @@ public final class Utils {
             if (x - i > 0 || y - i < 0) {
                 break;
             }
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x - i, y - i)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, x - i, y - i)) {
                 break;
             }
         }
@@ -85,16 +85,16 @@ public final class Utils {
 
     public static List<Position> getHorizontalMovePositions(Position from, Board board) {
         final int y = from.getY();
-        final File fileMoved = board.fileAt(from.getX(), y);
+        final Cell cellMoved = board.fileAt(from.getX(), y);
         List<Position> availablePositions = new ArrayList<>();
         for (int i = from.getX() + 1; i < Board.BOARD_SIZE; i++) {
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, i, y)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, i, y)) {
                 break;
             }
         }
 
         for (int i = from.getX() - 1; i >= 0; i--) {
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, i, y)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, i, y)) {
                 break;
             }
         }
@@ -104,16 +104,16 @@ public final class Utils {
 
     public static List<Position> getVerticalMovePositions(Position from, Board board) {
         final int x = from.getX();
-        final File fileMoved = board.fileAt(x, from.getY());
+        final Cell cellMoved = board.fileAt(x, from.getY());
         List<Position> availablePositions = new ArrayList<>();
         for (int i = from.getY() + 1; i < Board.BOARD_SIZE; i++) {
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x, i)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, x, i)) {
                 break;
             }
         }
 
         for (int i = from.getY() - 1; i >= 0; i--) {
-            if (breakOrAddAndContinue(board, availablePositions, fileMoved, x, i)) {
+            if (breakOrAddAndContinue(board, availablePositions, cellMoved, x, i)) {
                 break;
             }
         }

@@ -1,7 +1,7 @@
 package com.densev.chess.game.moves;
 
 import com.densev.chess.game.board.Board;
-import com.densev.chess.game.board.File;
+import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Piece;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -31,31 +31,31 @@ public abstract class Move {
     }
 
     public boolean move(Position from, Position to) {
-        File fileAtTo = fileAt(to.getX(), to.getY());
-        File fileAtFrom = fileAt(from.getX(), from.getY());
+        Cell cellAtTo = fileAt(to.getX(), to.getY());
+        Cell cellAtFrom = fileAt(from.getX(), from.getY());
 
-        if (fileAtTo.isNotEmpty()) {
-            if (Piece.KING.equals(fileAtTo.getPiece())) {
-                log.info("{} king captured! Checkmate.", fileAtTo.getColor());
+        if (cellAtTo.isNotEmpty()) {
+            if (Piece.KING.equals(cellAtTo.getPiece())) {
+                log.info("{} king captured! Checkmate.", cellAtTo.getColor());
 
-                updatePositions(fileAtFrom, from, to);
+                updatePositions(cellAtFrom, from, to);
                 return true;
             }
-            log.info("Captured: {}", fileAtTo);
+            log.info("Captured: {}", cellAtTo);
         }
 
-        updatePositions(fileAtFrom, from, to);
+        updatePositions(cellAtFrom, from, to);
         return false;
     }
 
-    private void updatePositions(File fileAtFrom, Position from, Position to) {
+    private void updatePositions(Cell cellAtFrom, Position from, Position to) {
         // clear previous position
-        this.board.setFileAt(File.empty(), from.getX(), from.getY());
+        this.board.setFileAt(Cell.empty(), from.getX(), from.getY());
         // set file at new position to file that is being moved
-        this.board.setFileAt(fileAtFrom, to.getX(), to.getY());
+        this.board.setFileAt(cellAtFrom, to.getX(), to.getY());
     }
 
-    File fileAt(int x, int y) {
+    Cell fileAt(int x, int y) {
         return this.board.fileAt(x, y);
     }
 

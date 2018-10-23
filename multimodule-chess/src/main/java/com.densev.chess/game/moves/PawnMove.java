@@ -2,8 +2,8 @@ package com.densev.chess.game.moves;
 
 import com.densev.chess.Utils;
 import com.densev.chess.game.board.Board;
+import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Color;
-import com.densev.chess.game.board.File;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +27,11 @@ public class PawnMove extends Move {
         super(board);
     }
 
-    public boolean orientationIsDown(File file) {
-        return Color.BLACK.equals(file.getColor());
+    public boolean orientationIsDown(Cell cell) {
+        return Color.BLACK.equals(cell.getColor());
     }
 
-    public List<Position> getCapturable(final boolean orientationIsDown, File pawn, int x, int y) {
+    public List<Position> getCapturable(final boolean orientationIsDown, Cell pawn, int x, int y) {
         List<Position> capturablePositions = new ArrayList<>();
         if (orientationIsDown) {
             if (Utils.isInBounds(x - 1, y - 1)
@@ -73,7 +73,7 @@ public class PawnMove extends Move {
         //squares forward provided both squares in front of the pawn are unoccupied
         boolean hasNotMovedYet = y == 1 || y == 6;
 
-        File pawn = fileAt(x, y);
+        Cell pawn = fileAt(x, y);
         boolean orientationDown = orientationIsDown(pawn);
 
         List<Position> availablePositions = getCapturable(orientationDown, pawn, x, y);

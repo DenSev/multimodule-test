@@ -2,7 +2,7 @@ package com.densev.chess.game.moves;
 
 import com.densev.chess.Utils;
 import com.densev.chess.game.board.Board;
-import com.densev.chess.game.board.File;
+import com.densev.chess.game.board.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class KnightMove extends Move {
         List<Position> availablePositions = new ArrayList<>();
         final int x = from.getX();
         final int y = from.getY();
-        File knight = fileAt(x, y);
+        Cell knight = fileAt(x, y);
 
         //upper right
         addIfAvailable(availablePositions, knight, x + 1, y + 2);
@@ -50,10 +50,10 @@ public class KnightMove extends Move {
         return availablePositions;
     }
 
-    private Position getIfAvailable(File file, int x, int y) {
+    private Position getIfAvailable(Cell cell, int x, int y) {
         if (Utils.isInBounds(x, y)) {
-            File targetFile = fileAt(x, y);
-            if (targetFile.isOpposing(file) || targetFile.isEmpty()) {
+            Cell targetCell = fileAt(x, y);
+            if (targetCell.isOpposing(cell) || targetCell.isEmpty()) {
                 return new Position(x, y);
             }
 
@@ -61,8 +61,8 @@ public class KnightMove extends Move {
         return null;
     }
 
-    private void addIfAvailable(List<Position> positions, File file, int x, int y) {
-        Position position = getIfAvailable(file, x, y);
+    private void addIfAvailable(List<Position> positions, Cell cell, int x, int y) {
+        Position position = getIfAvailable(cell, x, y);
         if (position != null) {
             positions.add(position);
         }
