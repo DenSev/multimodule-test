@@ -16,13 +16,12 @@ public class AIController extends Controller {
         super(board, color);
     }
 
-    public boolean makeAMove() {
+    public void makeAMove() {
 
         log.info("AIController does nothing for now.");
         //get all available pieces
         //get a random piece
         //get all available positions for movement
         //get random position
-        return false;
     }
 }

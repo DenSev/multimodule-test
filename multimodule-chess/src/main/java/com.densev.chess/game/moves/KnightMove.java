@@ -1,8 +1,8 @@
 package com.densev.chess.game.moves;
 
-import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
+import com.densev.chess.util.BoardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,16 @@ public class KnightMove extends Move {
         return availablePositions;
     }
 
+    /**
+     * Returns a new position if it is in bounds an is empty or occupied by a piece
+     * from opposing team
+     *
+     * @param cell - cell occupied by the knight piece that is being moved
+     * @param x    - target cell x
+     * @param y    - target cell y
+     * @return - a new position or null if x,y is out of bounds or x,y cell is occupied by
+     * a piece on the same team
+     */
     private Position getIfAvailable(Cell cell, int x, int y) {
         if (BoardUtils.isInBounds(x, y)) {
             Cell targetCell = fileAt(x, y);
@@ -61,6 +71,14 @@ public class KnightMove extends Move {
         return null;
     }
 
+    /**
+     * Add new position at x,y to list of available positions, if the knight piece which is being moved can move there
+     *
+     * @param positions - list of available positions
+     * @param cell      - cell occupied by the knight piece that is being moved
+     * @param x         - target cell x
+     * @param y         - target cell y
+     */
     private void addIfAvailable(List<Position> positions, Cell cell, int x, int y) {
         Position position = getIfAvailable(cell, x, y);
         if (position != null) {

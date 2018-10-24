@@ -146,8 +146,7 @@ public class Board {
     private boolean checkForPieces(Map<Position, Cell> pieces, Position opposingKingPosition) {
         for (Map.Entry<Position, Cell> pieceAtPosition : pieces.entrySet()) {
             Piece piece = pieceAtPosition.getValue().getPiece();
-            List<Position> positions = Game.PIECE_MOVEMENT
-                    .get(piece)
+            List<Position> positions = Game.INSTANCE.getPieceMovement(piece)
                     .getAvailableMovePositions(pieceAtPosition.getKey());
 
             if (positions.contains(opposingKingPosition)) {

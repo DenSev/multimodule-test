@@ -36,15 +36,11 @@ public abstract class Controller {
         this.controlledColor = controlledColor;
     }
 
-    public abstract boolean makeAMove();
+    public abstract void makeAMove();
 
-    public boolean makeAMoveAndCheck() {
-        boolean checkmate = makeAMove();
-        if (checkmate) {
-            return true;
-        }
+    public void makeAMoveAndCheck() {
+        makeAMove();
         check();
-        return false;
     }
 
     private void check() {

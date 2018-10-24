@@ -24,7 +24,7 @@ public class Player {
         this.controller = controller;
     }
 
-    public boolean makeAMove(){
-        return controller.makeAMoveAndCheck();
+    public void makeAMove() {
+        controller.makeAMoveAndCheck();
     }
 }

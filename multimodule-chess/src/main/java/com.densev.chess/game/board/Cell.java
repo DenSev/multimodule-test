@@ -27,13 +27,6 @@ public class Cell {
         return new Cell();
     }
 
-    public boolean isNotEmpty() {
-        return this.piece != null;
-    }
-    public boolean isEmpty(){
-        return this.piece == null;
-    }
-
     public String getRepresentation() {
         return "[" + representation + "]";
     }
@@ -44,6 +37,19 @@ public class Cell {
 
     public Piece getPiece() {
         return piece;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+        this.representation = this.color.getRepresentation(this.piece);
+    }
+
+    public boolean isNotEmpty() {
+        return this.piece != null;
+    }
+
+    public boolean isEmpty() {
+        return this.piece == null;
     }
 
     public boolean isNotOpposing(Cell cell) {

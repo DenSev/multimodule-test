@@ -1,13 +1,15 @@
 package com.densev.chess.players;
 
 import com.densev.chess.game.Game;
-import com.densev.chess.util.BoardUtils;
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Color;
 import com.densev.chess.game.board.Piece;
+import com.densev.chess.game.events.Dispatcher;
+import com.densev.chess.game.events.PawnPromoteEvent;
 import com.densev.chess.game.moves.Move;
 import com.densev.chess.game.moves.Position;
+import com.densev.chess.util.BoardUtils;
 import com.densev.chess.util.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,44 +28,34 @@ public class PlayerController extends Controller {
         super(board, color);
     }
 
-    public boolean makeAMove() {
+    public void makeAMove() {
 
-        boolean hasNotMadeAMove = true;
+        // get x, y of piece to move
+        // get piece at x, y
+        Map.Entry<Position, Cell> pieceAndPosition = getPieceAndPosition();
+        Position initialPosition = pieceAndPosition.getKey();
+        Cell cell = pieceAndPosition.getValue();
 
-        while (hasNotMadeAMove) {
-            // get x, y of piece to move
-            // get piece at x, y
-            Map.Entry<Position, Cell> pieceAndPosition = getPieceAndPosition();
-            Position initialPosition = pieceAndPosition.getKey();
-            Cell cell = pieceAndPosition.getValue();
+        Move move = Game.INSTANCE.getPieceMovement(cell.getPiece());
 
-            Move move = Game.PIECE_MOVEMENT.get(cell.getPiece());
+        Position newPosition = getValidNewPosition(move, initialPosition);
 
-            Position newPosition = getValidNewPosition(move, initialPosition);
+        move.move(initialPosition, newPosition);
 
-            boolean checkmate = move.move(initialPosition, newPosition);
-
-            if (checkmate) {
-                return true;
-            }
-
-            if (Piece.PAWN.equals(cell.getPiece())) {
-                // check pawn for promotion
-            }
-
-            // check for check
-
-            hasNotMadeAMove = false;
+        if (Piece.PAWN.equals(cell.getPiece()) && newPosition.getY() == 7) {
+            Dispatcher.INSTANCE.handleEvent(new PawnPromoteEvent(cell));
+            // check pawn for promotion
         }
 
-        return false;
+        // check for check
+
     }
 
     private Position getPiecePosition() {
         log.info("Enter x of piece to move: ");
-        int x = Input.getNumber();
+        int x = Input.getInteger();
         log.info("Enter y of piece to move: ");
-        int y = Input.getNumber();
+        int y = Input.getInteger();
 
         return new Position(x, y);
     }
@@ -91,9 +83,9 @@ public class PlayerController extends Controller {
 
     private Position getNewPosition() {
         log.info("Enter x of where to move the piece: ");
-        int newX = Input.getNumber();
+        int newX = Input.getInteger();
         log.info("Enter y of where to move the piece: ");
-        int newY = Input.getNumber();
+        int newY = Input.getInteger();
 
         return new Position(newX, newY);
     }

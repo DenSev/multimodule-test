@@ -11,12 +11,7 @@ public class CheckmateEventHandler implements Handler<CheckmateEvent> {
 
     @Override
     public boolean handle(CheckmateEvent checkmateEvent) {
-        log.info("Game is finished, play again? [Enter 'yes' to continue playing]");
-        String input = Input.getLine();
-        if ("yes".equals(input)) {
-            Game.playGame();
-        }
-
+        Game.INSTANCE.setCheckmate(true);
         return true;
     }
 }

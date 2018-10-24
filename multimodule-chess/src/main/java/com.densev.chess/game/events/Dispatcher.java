@@ -11,6 +11,7 @@ public enum Dispatcher {
     public Map<Class<? extends Event>, Handler> eventHandlers = ImmutableMap
             .<Class<? extends Event>, Handler>builder()
             .put(CheckmateEvent.class, new CheckmateEventHandler())
+            .put(PawnPromoteEvent.class, new PawnPromoteEventHandler())
             .build();
 
     public <T extends Event> void handleEvent(T event) {

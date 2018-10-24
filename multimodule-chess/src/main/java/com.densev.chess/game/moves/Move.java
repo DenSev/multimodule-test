@@ -3,6 +3,8 @@ package com.densev.chess.game.moves;
 import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Piece;
+import com.densev.chess.game.events.CheckmateEvent;
+import com.densev.chess.game.events.Dispatcher;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,22 +32,18 @@ public abstract class Move {
         return false;
     }
 
-    public boolean move(Position from, Position to) {
+    public void move(Position from, Position to) {
         Cell cellAtTo = fileAt(to.getX(), to.getY());
         Cell cellAtFrom = fileAt(from.getX(), from.getY());
 
         if (cellAtTo.isNotEmpty()) {
+            log.info("Captured: {}", cellAtTo);
             if (Piece.KING.equals(cellAtTo.getPiece())) {
                 log.info("{} king captured! Checkmate.", cellAtTo.getColor());
-
-                updatePositions(cellAtFrom, from, to);
-                return true;
+                Dispatcher.INSTANCE.handleEvent(new CheckmateEvent());
             }
-            log.info("Captured: {}", cellAtTo);
         }
-
         updatePositions(cellAtFrom, from, to);
-        return false;
     }
 
     private void updatePositions(Cell cellAtFrom, Position from, Position to) {
