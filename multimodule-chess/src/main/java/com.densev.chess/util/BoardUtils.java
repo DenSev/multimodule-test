@@ -24,7 +24,7 @@ public final class BoardUtils {
         if (!isInBounds(x, y)) {
             return true;
         }
-        Cell cellAt = board.fileAt(x, y);
+        Cell cellAt = board.cellAt(x, y);
         // should break if we find piece of the same team
         if (cellAt.isNotEmpty() && cellAt.isNotOpposing(cellMoved)) {
             return true;
@@ -40,7 +40,7 @@ public final class BoardUtils {
     public static List<Position> getDiagonalMovePositions(Position from, Board board) {
         final int x = from.getX();
         final int y = from.getY();
-        final Cell cellMoved = board.fileAt(x, y);
+        final Cell cellMoved = board.cellAt(x, y);
         List<Position> availablePositions = new ArrayList<>();
 
         // upper right
@@ -73,7 +73,7 @@ public final class BoardUtils {
 
     public static List<Position> getHorizontalMovePositions(Position from, Board board) {
         final int y = from.getY();
-        final Cell cellMoved = board.fileAt(from.getX(), y);
+        final Cell cellMoved = board.cellAt(from.getX(), y);
         List<Position> availablePositions = new ArrayList<>();
         for (int i = from.getX() + 1; i < Board.BOARD_SIZE; i++) {
             if (breakOrAddAndContinue(board, availablePositions, cellMoved, i, y)) {
@@ -92,7 +92,7 @@ public final class BoardUtils {
 
     public static List<Position> getVerticalMovePositions(Position from, Board board) {
         final int x = from.getX();
-        final Cell cellMoved = board.fileAt(x, from.getY());
+        final Cell cellMoved = board.cellAt(x, from.getY());
         List<Position> availablePositions = new ArrayList<>();
         for (int i = from.getY() + 1; i < Board.BOARD_SIZE; i++) {
             if (breakOrAddAndContinue(board, availablePositions, cellMoved, x, i)) {

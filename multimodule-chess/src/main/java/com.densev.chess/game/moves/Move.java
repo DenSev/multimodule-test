@@ -48,13 +48,13 @@ public abstract class Move {
 
     private void updatePositions(Cell cellAtFrom, Position from, Position to) {
         // clear previous position
-        this.board.setFileAt(Cell.empty(), from.getX(), from.getY());
+        this.board.setCellAt(Cell.empty(), from.getX(), from.getY());
         // set file at new position to file that is being moved
-        this.board.setFileAt(cellAtFrom, to.getX(), to.getY());
+        this.board.setCellAt(cellAtFrom, to.getX(), to.getY());
     }
 
     Cell fileAt(int x, int y) {
-        return this.board.fileAt(x, y);
+        return this.board.cellAt(x, y);
     }
 
     public abstract List<Position> getAvailableMovePositions(Position from);

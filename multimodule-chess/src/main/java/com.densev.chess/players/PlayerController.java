@@ -67,16 +67,16 @@ public class PlayerController extends Controller {
             log.error("Your coordinates are out of bounds");
             return getPieceAndPosition();
         }
-        if (board.fileAt(position.getX(), position.getY()).isEmpty()) {
+        if (board.cellAt(position.getX(), position.getY()).isEmpty()) {
             log.error("There is no piece at: {},{}", position.getX(), position.getY());
             return getPieceAndPosition();
         }
-        if (!controlledColor.equals(board.fileAt(position.getX(), position.getY()).getColor())) {
+        if (!controlledColor.equals(board.cellAt(position.getX(), position.getY()).getColor())) {
             log.error("This is your opponent's piece. Please chose a new one.");
             return getPieceAndPosition();
         }
 
-        Cell cellWithPieceToMove = board.fileAt(position.getX(), position.getY());
+        Cell cellWithPieceToMove = board.cellAt(position.getX(), position.getY());
         log.info("You chose to move: {} {}", cellWithPieceToMove.getPiece(), cellWithPieceToMove.getRepresentation());
         return new AbstractMap.SimpleImmutableEntry<>(position, cellWithPieceToMove);
     }
@@ -98,7 +98,7 @@ public class PlayerController extends Controller {
             log.info("Your coordinates are out of bounds");
             return getValidNewPosition(move, from);
         }
-        if (controlledColor.equals(board.fileAt(newPosition.getX(), newPosition.getY()).getColor())) {
+        if (controlledColor.equals(board.cellAt(newPosition.getX(), newPosition.getY()).getColor())) {
             log.info("This space is occupied by one of your pieces. Please chose a new position.");
             return getValidNewPosition(move, from);
         }

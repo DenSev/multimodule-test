@@ -39,7 +39,7 @@ public class KingMove extends Move {
     }
 
     private Position available(int x, int y) {
-        if (BoardUtils.isInBounds(x, y) && board.fileAt(x, y).isEmpty()) {
+        if (BoardUtils.isInBounds(x, y) && board.cellAt(x, y).isEmpty()) {
             return new Position(x, y);
         }
         return null;

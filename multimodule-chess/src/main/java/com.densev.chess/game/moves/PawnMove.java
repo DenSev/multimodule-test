@@ -79,20 +79,20 @@ public class PawnMove extends Move {
         List<Position> availablePositions = getCapturable(orientationDown, pawn, x, y);
 
         if (orientationDown) {
-            if (BoardUtils.isInBounds(x, y - 1) && board.fileAt(x, y - 1).isEmpty()) {
+            if (BoardUtils.isInBounds(x, y - 1) && board.cellAt(x, y - 1).isEmpty()) {
                 availablePositions.add(new Position(x, y - 1));
 
-                if (hasNotMovedYet && BoardUtils.isInBounds(x, y - 2) && board.fileAt(x, y - 2).isEmpty()) {
+                if (hasNotMovedYet && BoardUtils.isInBounds(x, y - 2) && board.cellAt(x, y - 2).isEmpty()) {
                     availablePositions.add(new Position(x, y - 2));
                 }
             }
             return availablePositions;
         }
 
-        if (BoardUtils.isInBounds(x, y + 1) && board.fileAt(x, y + 1).isEmpty()) {
+        if (BoardUtils.isInBounds(x, y + 1) && board.cellAt(x, y + 1).isEmpty()) {
             availablePositions.add(new Position(x, y + 1));
 
-            if (hasNotMovedYet && BoardUtils.isInBounds(x, y + 2) && board.fileAt(x, y + 2).isEmpty()) {
+            if (hasNotMovedYet && BoardUtils.isInBounds(x, y + 2) && board.cellAt(x, y + 2).isEmpty()) {
                 availablePositions.add(new Position(x, y + 2));
             }
         }
