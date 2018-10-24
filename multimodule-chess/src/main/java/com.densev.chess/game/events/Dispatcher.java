@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
 
+/**
+ * Event dispatcher, maps event types to handlers
+ */
 public enum Dispatcher {
 
     INSTANCE;
@@ -14,6 +17,12 @@ public enum Dispatcher {
             .put(PawnPromoteEvent.class, new PawnPromoteEventHandler())
             .build();
 
+    /**
+     * Passes the event in param to appropriate handler
+     *
+     * @param event - event to handle
+     * @param <T> - event type
+     */
     public <T extends Event> void handleEvent(T event) {
         eventHandlers.get(event.getClass()).handle(event);
     }

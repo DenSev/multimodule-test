@@ -5,6 +5,8 @@ import com.densev.chess.game.Game;
 import java.util.Map;
 
 /**
+ * Colors of the pieces, additionally maps piece representations to color
+ *
  * Created on: 10/23/18
  */
 public enum Color {
@@ -17,15 +19,8 @@ public enum Color {
         this.pieceRepresentations = pieceRepresentations;
     }
 
-
     public String getRepresentation(Piece piece) {
         return this.pieceRepresentations.get(piece);
     }
 
-    public Color getOpposite(){
-        if(BLACK.equals(this)){
-            return WHITE;
-        }
-        return BLACK;
-    }
 }

@@ -7,14 +7,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Handles pawn promotion event dispatched from {@link com.densev.chess.players.PlayerController}
+ * Asks player to enter name of the piece to promote to
+ * <p>
  * Created on: 10/24/18
  */
-public class PawnPromoteEventHandler implements Handler<PawnPromoteEvent>{
+public class PawnPromoteEventHandler implements Handler<PawnPromoteEvent> {
 
     private static final Logger log = LoggerFactory.getLogger(PawnPromoteEventHandler.class);
 
     @Override
-    public boolean handle(PawnPromoteEvent pawnPromoteEvent) {
+    public void handle(PawnPromoteEvent pawnPromoteEvent) {
         Cell pawn = pawnPromoteEvent.getPawn();
 
         log.info("Your pawn can be promoted. Choose a piece to convert to.\n" +
@@ -23,11 +26,14 @@ public class PawnPromoteEventHandler implements Handler<PawnPromoteEvent>{
 
         Piece newPiece = getPiece();
         pawn.setPiece(newPiece);
-
-        return true;
     }
 
-    private Piece getPiece(){
+    /**
+     * Returns piece to promote to
+     *
+     * @return - piece to promote to
+     */
+    private Piece getPiece() {
         String pieceName = Input.getLine();
         try {
             return Piece.valueOf(pieceName.toUpperCase());

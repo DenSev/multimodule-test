@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Handles pawn promotion event dispatched from {@link com.densev.chess.players.RandomAIController}
+ * Randomly selects a piece to promote to.
+ * <p>
  * Created on: 10/24/18
  */
 public class RandomPawnPromoteEventHandler implements Handler<RandomPawnPromoteEvent> {
@@ -15,13 +18,11 @@ public class RandomPawnPromoteEventHandler implements Handler<RandomPawnPromoteE
     private static final Piece[] AVAILABLE_PIECES = new Piece[]{Piece.QUEEN, Piece.BISHOP, Piece.ROOK, Piece.KNIGHT};
 
     @Override
-    public boolean handle(RandomPawnPromoteEvent randomPawnPromoteEvent) {
+    public void handle(RandomPawnPromoteEvent randomPawnPromoteEvent) {
         Cell pawn = randomPawnPromoteEvent.getPawn();
         int randomPieceNum = RandomBag.getInt(AVAILABLE_PIECES.length);
         Piece randomPiece = AVAILABLE_PIECES[randomPieceNum];
         pawn.setPiece(randomPiece);
         log.info("Pawn has been randomly promoted to {}", randomPiece);
-
-        return true;
     }
 }
