@@ -93,7 +93,7 @@ public class Board {
      * @param color - color of pieces to search for
      * @return - map with position and file
      */
-    private Map<Position, Cell> getFilesOfColor(Color color) {
+    public Map<Position, Cell> getCellsOfColor(Color color) {
 
         Map<Position, Cell> positionsOfPieces = new HashMap<>();
 
@@ -124,7 +124,7 @@ public class Board {
 
 
     public Color checkBoard() {
-        final Map<Position, Cell> whitePieces = getFilesOfColor(WHITE);
+        final Map<Position, Cell> whitePieces = getCellsOfColor(WHITE);
         final Position blackKingPosition = getPositionOfPiece(KING, BLACK);
         final boolean blackKingChecked = checkForPieces(whitePieces, blackKingPosition);
 
@@ -132,7 +132,7 @@ public class Board {
             return Color.BLACK;
         }
 
-        final Map<Position, Cell> blackPieces = getFilesOfColor(BLACK);
+        final Map<Position, Cell> blackPieces = getCellsOfColor(BLACK);
         final Position whiteKingPosition = getPositionOfPiece(KING, WHITE);
         final boolean whiteKingChecked = checkForPieces(blackPieces, whiteKingPosition);
 
@@ -143,6 +143,13 @@ public class Board {
         return null;
     }
 
+    /**
+     * Checks if king at opposingKingPositions is in available movement positions of pieces provided in map
+     *
+     * @param pieces - map of pieces at positions
+     * @param opposingKingPosition - king's positions
+     * @return - true if king is checked, false if not
+     */
     private boolean checkForPieces(Map<Position, Cell> pieces, Position opposingKingPosition) {
         for (Map.Entry<Position, Cell> pieceAtPosition : pieces.entrySet()) {
             Piece piece = pieceAtPosition.getValue().getPiece();

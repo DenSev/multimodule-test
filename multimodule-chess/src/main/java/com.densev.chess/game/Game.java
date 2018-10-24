@@ -4,7 +4,8 @@ import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Color;
 import com.densev.chess.game.board.Piece;
 import com.densev.chess.game.moves.*;
-import com.densev.chess.players.AIController;
+import com.densev.chess.players.DoNothingAIController;
+import com.densev.chess.players.RandomAIController;
 import com.densev.chess.players.Player;
 import com.densev.chess.players.PlayerController;
 import com.densev.chess.util.Input;
@@ -61,7 +62,7 @@ public enum Game {
             BOARD.print();
 
             Player humanPlayer = new Player(new PlayerController(BOARD, Color.WHITE), Color.WHITE);
-            Player aiPlayer = new Player(new AIController(BOARD, Color.BLACK), Color.BLACK);
+            Player aiPlayer = new Player(new DoNothingAIController(BOARD, Color.BLACK), Color.BLACK);
 
             //game will continue until either stalemate or checkmate events were dispatched
             while (!isCheckmate()) {
