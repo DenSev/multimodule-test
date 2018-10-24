@@ -3,6 +3,9 @@ package com.densev.chess.game.moves;
 import java.util.Objects;
 
 /**
+ * Position, represents {@link com.densev.chess.game.board.Cell}'s
+ * x and y on {@link com.densev.chess.game.board.Board}
+ *
  * Created on: 10/23/18
  */
 public class Position {

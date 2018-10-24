@@ -6,7 +6,6 @@ import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Color;
 import com.densev.chess.game.board.Piece;
 import com.densev.chess.game.events.Dispatcher;
-import com.densev.chess.game.events.PawnPromoteEvent;
 import com.densev.chess.game.events.RandomPawnPromoteEvent;
 import com.densev.chess.game.moves.Move;
 import com.densev.chess.game.moves.Position;
@@ -19,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Random ai controller. Randomly chooses a pice to move and randomly chooses a movement position
+ * If pawn can be promoted dispatches a {@link RandomPawnPromoteEvent}
+ *
  * Created on: 10/23/18
  */
 public class RandomAIController extends Controller {
@@ -47,7 +49,7 @@ public class RandomAIController extends Controller {
         List<Position> availableMoves = move.getAvailableMovePositions(randomPiece.getKey());
         int movesCount = availableMoves.size();
         if (movesCount == 0) {
-            log.error("AI has no available moves.");
+            log.error("AI has no available moves. I don't know what to do.");
             return;
         }
         int randomMoveNum = RandomBag.getInt(movesCount);

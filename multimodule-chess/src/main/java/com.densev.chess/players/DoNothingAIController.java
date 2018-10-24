@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Ai controller that does nothing, made for testing
+ *
  * Created on: 10/24/18
  */
 public class DoNothingAIController extends Controller {

@@ -38,6 +38,13 @@ public class KingMove extends Move {
         return availablePositions;
     }
 
+    /**
+     * Checks if position if available for movement: is in bound and empty
+     *
+     * @param x - x of position to check
+     * @param y - y of position to check
+     * @return - new Position of king can move there, null otherwise
+     */
     private Position available(int x, int y) {
         if (BoardUtils.isInBounds(x, y) && board.cellAt(x, y).isEmpty()) {
             return new Position(x, y);
@@ -45,6 +52,13 @@ public class KingMove extends Move {
         return null;
     }
 
+    /**
+     * Adds the position at x,y to available positions list if king can move there
+     *
+     * @param positions - list of available position
+     * @param x - x of position to check and add
+     * @param y - y of position to check and add
+     */
     private void addIfAvailable(List<Position> positions, int x, int y) {
         Position position = available(x, y);
         if (position != null) {

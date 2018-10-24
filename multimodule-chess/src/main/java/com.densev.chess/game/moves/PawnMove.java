@@ -27,11 +27,26 @@ public class PawnMove extends Move {
         super(board);
     }
 
-    public boolean orientationIsDown(Cell cell) {
+    /**
+     * Checks pawn orientation, BLACK pawns are always down, WHITE pawns are always up
+     *
+     * @param cell - cell to check
+     * @return - true if pawn is black, false if pawn is white
+     */
+    private boolean orientationIsDown(Cell cell) {
         return Color.BLACK.equals(cell.getColor());
     }
 
-    public List<Position> getCapturable(final boolean orientationIsDown, Cell pawn, int x, int y) {
+    /**
+     * Checks if pawn can capture any pieces, since pawn is the only piece that captures differently to moving
+     *
+     * @param orientationIsDown - pawn orientation
+     * @param pawn - the pawn cell
+     * @param x - x of the pawn position
+     * @param y - y of the pawn position
+     * @return - list of capturable positions
+     */
+    private List<Position> getCapturable(final boolean orientationIsDown, Cell pawn, int x, int y) {
         List<Position> capturablePositions = new ArrayList<>();
         if (orientationIsDown) {
             if (BoardUtils.isInBounds(x - 1, y - 1)
@@ -64,6 +79,14 @@ public class PawnMove extends Move {
         return capturablePositions;
     }
 
+    /**
+     * Returns a list of available move positions of the pawn moving
+     * Position calculation differs based on pawn orientation and whether
+     * there are any pieces a pawn can capture or not.
+     *
+     * @param from - the position of the piece to move
+     * @return - list of available move positions
+     */
     @Override
     public List<Position> getAvailableMovePositions(Position from) {
         int x = from.getX();

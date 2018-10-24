@@ -4,10 +4,7 @@ import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Color;
 import com.densev.chess.game.board.Piece;
 import com.densev.chess.game.moves.*;
-import com.densev.chess.players.DoNothingAIController;
-import com.densev.chess.players.RandomAIController;
-import com.densev.chess.players.Player;
-import com.densev.chess.players.PlayerController;
+import com.densev.chess.players.*;
 import com.densev.chess.util.Input;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
@@ -16,6 +13,10 @@ import org.slf4j.LoggerFactory;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * Main game class, in addition to playGame method contains some
+ * required info such as piece-color representations and piece movement mapping
+ */
 public enum Game {
 
     INSTANCE;
@@ -53,6 +54,9 @@ public enum Game {
 
     private boolean checkmate;
 
+    /**
+     * Method called to play the game
+     */
     public void playGame() {
         String play = "yes";
 
@@ -61,18 +65,18 @@ public enum Game {
             BOARD.fillTheBoard();
             BOARD.print();
 
-            Player humanPlayer = new Player(new PlayerController(BOARD, Color.WHITE), Color.WHITE);
-            Player aiPlayer = new Player(new DoNothingAIController(BOARD, Color.BLACK), Color.BLACK);
+            Controller whitePlayer = new PlayerController(BOARD, Color.WHITE);
+            Controller blackPlayer = new DoNothingAIController(BOARD, Color.BLACK);
 
             //game will continue until either stalemate or checkmate events were dispatched
             while (!isCheckmate()) {
-                humanPlayer.makeAMove();
+                whitePlayer.makeAMove();
                 BOARD.print();
                 if (isCheckmate()) {
                     break;
                 }
 
-                aiPlayer.makeAMove();
+                blackPlayer.makeAMove();
                 BOARD.print();
                 if (isCheckmate()) {
                     break;
@@ -87,6 +91,12 @@ public enum Game {
         Input.shutdown();
     }
 
+    /**
+     * Returns movement class of the piece
+     *
+     * @param piece - piece
+     * @return - movement class
+     */
     public Move getPieceMovement(Piece piece) {
         return this.PIECE_MOVEMENT.get(piece);
     }

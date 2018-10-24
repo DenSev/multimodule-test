@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Controller manages piece movement done by player or ai
+ *
  * Created on: 10/23/18
  */
 public abstract class Controller {
@@ -36,13 +38,22 @@ public abstract class Controller {
         this.controlledColor = controlledColor;
     }
 
+    /**
+     * Main method of moving a piece, subclasses should implement this
+     */
     public abstract void makeAMove();
 
+    /**
+     * Makes a move and checks for check
+     */
     public void makeAMoveAndCheck() {
         makeAMove();
         check();
     }
 
+    /**
+     * Checks for check
+     */
     private void check() {
         Color color = board.checkBoard();
         if (color != null) {

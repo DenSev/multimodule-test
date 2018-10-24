@@ -18,6 +18,8 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 /**
+ * Player controller, real player decides piece movement
+ * <p>
  * Created on: 10/23/18
  */
 public class PlayerController extends Controller {
@@ -28,29 +30,42 @@ public class PlayerController extends Controller {
         super(board, color);
     }
 
+    /**
+     * Makes player choose a move, recursively calls itself
+     * if chosen piece has no movement positions available
+     */
     public void makeAMove() {
 
-        // get x, y of piece to move
         // get piece at x, y
         Map.Entry<Position, Cell> pieceAndPosition = getPieceAndPosition();
+        // get piece initial position
         Position initialPosition = pieceAndPosition.getKey();
+        // get piece cell
         Cell cell = pieceAndPosition.getValue();
-
+        // gen piece move component
         Move move = Game.INSTANCE.getPieceMovement(cell.getPiece());
-
-        Position newPosition = getValidNewPosition(move, initialPosition);
-
-        move.move(initialPosition, newPosition);
-
-        if (Piece.PAWN.equals(cell.getPiece()) && newPosition.getY() == 7) {
-            Dispatcher.INSTANCE.handleEvent(new PawnPromoteEvent(cell));
-            // check pawn for promotion
+        if (move.getAvailableMovePositions(initialPosition).isEmpty()) {
+            log.error("Chose piece has no available movement. Choose another piece.");
+            makeAMove();
+            return;
         }
 
-        // check for check
+        // make a player choose a valid position
+        Position newPosition = getValidNewPosition(move, initialPosition);
+        // make a move
+        move.move(initialPosition, newPosition);
 
+        // check for pawn promotion
+        if (Piece.PAWN.equals(cell.getPiece()) && newPosition.getY() == 7) {
+            Dispatcher.INSTANCE.handleEvent(new PawnPromoteEvent(cell));
+        }
     }
 
+    /**
+     * Returns position with x,y entered by player
+     *
+     * @return - a new position
+     */
     private Position getPiecePosition() {
         log.info("Enter x of piece to move: ");
         int x = Input.getInteger();
@@ -60,6 +75,11 @@ public class PlayerController extends Controller {
         return new Position(x, y);
     }
 
+    /**
+     * Makes the player choose a valid piece
+     *
+     * @return cell and cell position of piece to move
+     */
     private Map.Entry<Position, Cell> getPieceAndPosition() {
         Position position = getPiecePosition();
 
@@ -81,6 +101,11 @@ public class PlayerController extends Controller {
         return new AbstractMap.SimpleImmutableEntry<>(position, cellWithPieceToMove);
     }
 
+    /**
+     * Get position at x,y that piece would be moved to
+     *
+     * @return - a new position at x,y
+     */
     private Position getNewPosition() {
         log.info("Enter x of where to move the piece: ");
         int newX = Input.getInteger();
@@ -90,6 +115,14 @@ public class PlayerController extends Controller {
         return new Position(newX, newY);
     }
 
+    /**
+     * Makes the player choose a valid position to move to
+     * Checks that the piece at from can move to chosen position
+     *
+     * @param move - the piece's move component
+     * @param from - pieces current position
+     * @return - new position to move to
+     */
     private Position getValidNewPosition(Move move, Position from) {
         log.debug("Available positions: {}", move.getAvailableMovePositions(from));
         Position newPosition = getNewPosition();
