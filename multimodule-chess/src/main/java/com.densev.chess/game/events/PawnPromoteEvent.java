@@ -1,9 +1,10 @@
 package com.densev.chess.game.events;
 
 import com.densev.chess.game.board.Cell;
+import com.densev.chess.players.CommandLinePlayer;
 
 /**
- * Pawn promotion event, dispatched from {@link com.densev.chess.players.PlayerController}
+ * Pawn promotion event, dispatched from {@link CommandLinePlayer}
  * Contains promoted pawn cell.
  * <p>
  * Created on: 10/24/18

@@ -6,15 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Ai controller that does nothing, made for testing
+ * Ai player that does nothing, made for testing
  *
  * Created on: 10/24/18
  */
-public class DoNothingAIController extends Controller {
+public class DoNothingAIPlayer extends Player {
 
-    private static final Logger log = LoggerFactory.getLogger(DoNothingAIController.class);
+    private static final Logger log = LoggerFactory.getLogger(DoNothingAIPlayer.class);
 
-    public DoNothingAIController(Board board, Color color) {
+    public DoNothingAIPlayer(Board board, Color color) {
         super(board, color);
     }
 

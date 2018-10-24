@@ -18,22 +18,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Random ai controller. Randomly chooses a pice to move and randomly chooses a movement position
+ * Random ai player. Randomly chooses a piece to move and randomly chooses a movement position
  * If pawn can be promoted dispatches a {@link RandomPawnPromoteEvent}
  *
  * Created on: 10/23/18
  */
-public class RandomAIController extends Controller {
+public class RandomAIPlayer extends Player {
 
-    private static final Logger log = LoggerFactory.getLogger(RandomAIController.class);
+    private static final Logger log = LoggerFactory.getLogger(RandomAIPlayer.class);
 
-    public RandomAIController(Board board, Color color) {
+    public RandomAIPlayer(Board board, Color color) {
         super(board, color);
     }
 
     public void makeAMove() {
-
-        log.info("RandomAIController does nothing for now.");
+        log.info("RandomAIPlayer is making a move.");
         Map<Position, Cell> positionCellMap = board.getCellsOfColor(controlledColor);
         if (positionCellMap.isEmpty()) {
             throw new IllegalStateException("Ai should have at least a king piece to move, " +

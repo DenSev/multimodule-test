@@ -4,7 +4,8 @@ import com.densev.chess.game.board.Board;
 import com.densev.chess.game.board.Color;
 import com.densev.chess.game.board.Piece;
 import com.densev.chess.game.moves.*;
-import com.densev.chess.players.*;
+import com.densev.chess.players.Player;
+import com.densev.chess.players.factory.PlayerFactory;
 import com.densev.chess.util.Input;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
@@ -42,14 +43,14 @@ public enum Game {
         .build());
 
 
-    private final Board BOARD = new Board();
+    private final Board board = new Board();
     public final Map<Piece, ? extends Move> PIECE_MOVEMENT = new EnumMap<Piece, Move>(ImmutableMap.<Piece, Move>builder()
-        .put(Piece.PAWN, new PawnMove(BOARD))
-        .put(Piece.ROOK, new RookMove(BOARD))
-        .put(Piece.KNIGHT, new KnightMove(BOARD))
-        .put(Piece.BISHOP, new BishopMove(BOARD))
-        .put(Piece.QUEEN, new QueenMove(BOARD))
-        .put(Piece.KING, new KingMove(BOARD))
+        .put(Piece.PAWN, new PawnMove(board))
+        .put(Piece.ROOK, new RookMove(board))
+        .put(Piece.KNIGHT, new KnightMove(board))
+        .put(Piece.BISHOP, new BishopMove(board))
+        .put(Piece.QUEEN, new QueenMove(board))
+        .put(Piece.KING, new KingMove(board))
         .build());
 
     private boolean checkmate;
@@ -62,22 +63,26 @@ public enum Game {
 
         while ("yes".equals(play)) {
             setCheckmate(false);
-            BOARD.fillTheBoard();
-            BOARD.print();
+            board.fillTheBoard();
+            board.print();
 
-            Controller whitePlayer = new PlayerController(BOARD, Color.WHITE);
-            Controller blackPlayer = new DoNothingAIController(BOARD, Color.BLACK);
+            log.info("Please select white player or press enter to use default player.\n" +
+                " Available players are: {}", PlayerFactory.PLAYERS);
+            Player whitePlayer = createPlayer(PlayerFactory.COMMAND_LINE_PLAYER, board, Color.WHITE);
+            log.info("Please select black player or press enter to use default player.\n" +
+                " Available players are: {}", PlayerFactory.PLAYERS);
+            Player blackPlayer = createPlayer(PlayerFactory.DO_NOTHING_PLAYER, board, Color.BLACK);
 
             //game will continue until either stalemate or checkmate events were dispatched
             while (!isCheckmate()) {
                 whitePlayer.makeAMove();
-                BOARD.print();
+                board.print();
                 if (isCheckmate()) {
                     break;
                 }
 
                 blackPlayer.makeAMove();
-                BOARD.print();
+                board.print();
                 if (isCheckmate()) {
                     break;
                 }
@@ -89,6 +94,18 @@ public enum Game {
         }
 
         Input.shutdown();
+    }
+
+    private Player createPlayer(String defaultPlayer, Board board, Color color) {
+        String player = Input.getLine();
+        if (player == null || player.isEmpty()) {
+            player = defaultPlayer;
+        }
+        if (!PlayerFactory.PLAYERS.contains(player)) {
+            log.error("No such player. Please select a valid player.");
+            return createPlayer(defaultPlayer, board, color);
+        }
+        return PlayerFactory.getPlayerForName(player, board, color);
     }
 
     /**

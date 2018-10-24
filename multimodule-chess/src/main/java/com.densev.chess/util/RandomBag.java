@@ -3,6 +3,8 @@ package com.densev.chess.util;
 import java.util.Random;
 
 /**
+ * Random bag, creates {@link Random} with {@link System}.currentTimeMillis() at startup
+ *
  * Created on: 10/24/18
  */
 public class RandomBag {

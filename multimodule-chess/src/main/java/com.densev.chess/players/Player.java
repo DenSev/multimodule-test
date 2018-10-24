@@ -6,18 +6,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Controller manages piece movement done by player or ai
- *
+ * Player manages piece movement done by real player or ai
+ * <p>
  * Created on: 10/23/18
  */
-public abstract class Controller {
+public abstract class Player {
 
-    private static final Logger log = LoggerFactory.getLogger(Controller.class);
+    private static final Logger log = LoggerFactory.getLogger(Player.class);
 
     Board board;
     Color controlledColor;
 
-    public Controller(Board board, Color color) {
+    Player(Board board, Color color) {
         this.board = board;
         this.controlledColor = color;
     }

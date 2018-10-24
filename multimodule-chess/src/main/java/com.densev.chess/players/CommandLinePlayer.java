@@ -18,15 +18,15 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 /**
- * Player controller, real player decides piece movement
+ * Command line player, real player decides piece movement
  * <p>
  * Created on: 10/23/18
  */
-public class PlayerController extends Controller {
+public class CommandLinePlayer extends Player {
 
-    private static final Logger log = LoggerFactory.getLogger(PlayerController.class);
+    private static final Logger log = LoggerFactory.getLogger(CommandLinePlayer.class);
 
-    public PlayerController(Board board, Color color) {
+    public CommandLinePlayer(Board board, Color color) {
         super(board, color);
     }
 

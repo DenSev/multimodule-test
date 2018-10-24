@@ -2,12 +2,13 @@ package com.densev.chess.game.events;
 
 import com.densev.chess.game.board.Cell;
 import com.densev.chess.game.board.Piece;
+import com.densev.chess.players.CommandLinePlayer;
 import com.densev.chess.util.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Handles pawn promotion event dispatched from {@link com.densev.chess.players.PlayerController}
+ * Handles pawn promotion event dispatched from {@link CommandLinePlayer}
  * Asks player to enter name of the piece to promote to
  * <p>
  * Created on: 10/24/18
